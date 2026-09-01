@@ -1,0 +1,184 @@
+/* ==========================================================================
+   JudicialGPT Global Design System & Styles
+   ========================================================================== */
+
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', 'Cinzel', Georgia, 'Times New Roman', serif;
+  --font-urdu: 'Noto Nastaliq Urdu', 'Noto Sans Arabic', Tahoma, sans-serif;
+  --font-arabic: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+
+  /* Color Palette - Lush Emerald, Mint & Obsidian Glass */
+  --primary-emerald: #059669;
+  --primary-emerald-hover: #047857;
+  --primary-mint: #10b981;
+  --mint-light: #d1fae5;
+  --mint-ultra-light: #ecfdf5;
+  
+  --bg-gradient-start: #e0f8ec;
+  --bg-gradient-mid: #bbf1d8;
+  --bg-gradient-end: #7edcb0;
+
+  --text-dark: #072218;
+  --text-dark-muted: #1a4937;
+  --text-subtle: #456b5c;
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-emerald: rgba(16, 185, 129, 0.22);
+  --glass-shadow: 0 20px 45px rgba(5, 59, 41, 0.07);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-pill: 9999px;
+
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-dark);
+  background: radial-gradient(circle at 50% 22%, #e5fbf4 0%, #caf4e8 32%, #b0ecdc 68%, #97e3ce 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   Background Ambient Glowing Layers & Watermark
+   -------------------------------------------------------------------------- */
+.glow-bg-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.radial-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.7;
+}
+
+.glow-1 {
+  top: -8%;
+  left: 25%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.5) 0%, rgba(16, 185, 129, 0.08) 70%);
+}
+
+.glow-2 {
+  top: 10%;
+  right: -2%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(5, 150, 105, 0.04) 70%);
+}
+
+.glow-3 {
+  bottom: 5%;
+  left: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.4) 0%, rgba(16, 185, 129, 0) 70%);
+}
+
+.bg-watermark-scales {
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1280px;
+  max-width: 98vw;
+  height: 960px;
+  opacity: 0.65;
+  pointer-events: none;
+  animation: floatSubtle 14s ease-in-out infinite alternate;
+}
+
+.watermark-svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes floatSubtle {
+  0% {
+    transform: translateX(-50%) translateY(0px) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) translateY(18px) scale(1.02);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Typography Helpers
+   -------------------------------------------------------------------------- */
+.rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: var(--font-arabic);
+}
+
+.font-urdu {
+  font-family: var(--font-urdu);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & Micro-interactions
+   -------------------------------------------------------------------------- */
+.btn-emerald {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff !important;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 0.65rem 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28);
+  text-decoration: none;
+}
+
+.btn-emerald:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.38);
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+}
+
+.btn-emerald:active {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   Glassmorphic Card Utility
+   -------------------------------------------------------------------------- */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}

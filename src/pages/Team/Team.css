@@ -1,0 +1,355 @@
+/* ==========================================================================
+   Team Page Styles - Minimal Card (Pic, Name, Working) + Interactive Details Modal
+   ========================================================================== */
+
+.team-card-minimal {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 2.4rem 1.6rem 1.8rem 1.6rem;
+  box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card-minimal:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px rgba(5, 59, 41, 0.14);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* Picture Container */
+.team-pic-container {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto 1.4rem auto;
+  padding: 4px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 10px 24px rgba(5, 150, 105, 0.28);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card-minimal:hover .team-pic-container {
+  transform: scale(1.06);
+  box-shadow: 0 14px 32px rgba(5, 150, 105, 0.4);
+}
+
+.team-member-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  display: block;
+}
+
+.team-member-fallback-initials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  border: 3px solid #ffffff;
+}
+
+/* Floating Eye/View Badge on Pic */
+.team-pic-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #059669;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.team-card-minimal:hover .team-pic-badge {
+  transform: scale(1.15);
+  background: #047857;
+}
+
+/* Name */
+.team-member-name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #072218;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+/* Working / Role */
+.team-member-working {
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+/* Subtle Click prompt */
+.team-card-click-label {
+  margin-top: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #406958;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.team-card-minimal:hover .team-card-click-label {
+  opacity: 1;
+  color: #059669;
+}
+
+/* ==========================================================================
+   Interactive Details Modal
+   ========================================================================== */
+.team-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 34, 24, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.team-modal-dialog {
+  background: #ffffff;
+  border-radius: 28px;
+  max-width: 780px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(5, 45, 32, 0.35);
+  position: relative;
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid rgba(16, 185, 129, 0.2);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.team-modal-close-btn {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.team-modal-close-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  transform: rotate(90deg);
+}
+
+.team-modal-inner {
+  display: flex;
+  flex-direction: row;
+  padding: 2.5rem;
+  gap: 2.5rem;
+}
+
+.team-modal-aside {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.team-modal-pic-box {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 12px 28px rgba(5, 150, 105, 0.28);
+  margin-bottom: 1.2rem;
+}
+
+.team-modal-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+}
+
+.team-large-initials {
+  font-size: 3.2rem;
+}
+
+.team-modal-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.team-modal-badge {
+  background: #f8faf9;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 12px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e3a2f;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.team-modal-main {
+  flex: 1;
+}
+
+.team-modal-working-tag {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  margin-bottom: 0.6rem;
+}
+
+.team-modal-heading-name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #072218;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.5px;
+}
+
+.team-modal-detail-block {
+  margin-bottom: 1.4rem;
+}
+
+.detail-section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f2b20;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.detail-narrative-text {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: #334155;
+  margin: 0;
+}
+
+.expertise-pill-tag {
+  background: #f1fbf7;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #073824;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+}
+
+@media (max-width: 768px) {
+  .team-modal-inner {
+    flex-direction: column;
+    padding: 2rem 1.4rem;
+    gap: 1.5rem;
+  }
+
+  .team-modal-aside {
+    width: 100%;
+  }
+
+  .team-modal-pic-box {
+    width: 130px;
+    height: 130px;
+  }
+
+  .team-modal-heading-name {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .team-modal-working-tag {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 0.6rem auto;
+  }
+
+  .team-modal-actions {
+    flex-direction: column;
+  }
+
+  .team-modal-actions button {
+    width: 100%;
+  }
+}

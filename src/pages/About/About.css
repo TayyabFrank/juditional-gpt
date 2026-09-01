@@ -1,0 +1,22 @@
+/* ==========================================================================
+   About Page Styles
+   ========================================================================== */
+
+.about-narrative-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 2.6rem;
+  box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
+  margin-bottom: 2.5rem;
+}
+
+.mission-stat-box {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(5, 60, 42, 0.04);
+}
