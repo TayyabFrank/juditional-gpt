@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Team.css'
 import Tilt3D from '../../components/Tilt3D'
 
@@ -13,6 +13,16 @@ export default function Team({ onOpenModal }) {
       setIsClosing(false)
     }, 280)
   }
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && selectedMember) {
+        handleCloseModal()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedMember])
 
   const teamMembers = [
     {
@@ -101,7 +111,7 @@ export default function Team({ onOpenModal }) {
         <div className="row g-4 mb-3 justify-content-center">
           {teamMembers.map((m) => (
             <div key={m.id} className="col-12 col-sm-6 col-lg-4">
-              <Tilt3D maxTilt={10} scale={1.03} perspective={900} className="h-100">
+              <Tilt3D maxTilt={0} scale={1.04} perspective={900} className="h-100">
                 <div
                   className="team-card-minimal"
                   onClick={() => setSelectedMember(m)}
@@ -232,7 +242,7 @@ export default function Team({ onOpenModal }) {
                     </h5>
                     <div className="d-flex flex-wrap gap-2 mt-2">
                       {selectedMember.specialties.map((item, idx) => (
-                        <span key={idx} className="expertise-pill-tag">
+                        <span key={idx} className="expertise-pill-tag" style={{ '--pill-idx': idx }}>
                           <i className="bi bi-check2 text-success me-1"></i>
                           {item}
                         </span>

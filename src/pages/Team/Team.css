@@ -80,7 +80,7 @@
   transform: scale(1.06);
 }
 
-/* 1. Animated Conic Halo Spinner */
+/* 1. Animated Halo Zoom-Pulse Glow (No Rotation - Smooth Zoom In/Out Breathing) */
 .team-pic-halo-spinner {
   position: absolute;
   inset: -3px;
@@ -94,7 +94,7 @@
     #10b981
   );
   z-index: 1;
-  animation: spinHalo 6s linear infinite;
+  animation: haloZoomPulse 3.5s ease-in-out infinite alternate;
   opacity: 0.85;
   transition: opacity 0.3s ease, filter 0.3s ease;
   backface-visibility: hidden;
@@ -103,12 +103,19 @@
 
 .team-card-minimal:hover .team-pic-halo-spinner {
   opacity: 1;
-  filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.7));
+  filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.85));
 }
 
-@keyframes spinHalo {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes haloZoomPulse {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1.06);
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.7));
+  }
 }
 
 /* 2. Radar Ring Pulse */
@@ -143,6 +150,11 @@
   position: relative;
   z-index: 2;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-card-minimal:hover .team-member-pic {
+  transform: scale(1.08);
 }
 
 .team-member-fallback-initials {
@@ -182,7 +194,7 @@
 }
 
 .team-card-minimal:hover .team-pic-badge {
-  transform: scale(1.2) rotate(12deg);
+  transform: scale(1.22);
   background: #047857;
 }
 
@@ -260,73 +272,128 @@
 }
 
 /* ==========================================================================
-   Interactive Details Modal with Zoom & Staggered Animations
+   Interactive Details Modal with Eye-Catching 3D Physics & Staggered Animations
    ========================================================================== */
 .team-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 28, 20, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: radial-gradient(circle at center, rgba(6, 44, 31, 0.78) 0%, rgba(3, 20, 14, 0.88) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 1080;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  animation: modalBackdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modalBackdropEyeCatchingIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .team-modal-backdrop.closing {
-  animation: modalBackdropFadeOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modalBackdropEyeCatchingOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
 }
 
-@keyframes modalBackdropFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes modalBackdropEyeCatchingIn {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
 }
 
-@keyframes modalBackdropFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+@keyframes modalBackdropEyeCatchingOut {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
 }
 
 .team-modal-dialog {
   background: #ffffff;
-  border-radius: 30px;
-  max-width: 780px;
+  border-radius: 32px;
+  max-width: 800px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 35px 90px rgba(5, 45, 32, 0.4);
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3),
+              0 30px 80px -15px rgba(3, 30, 21, 0.55),
+              0 0 45px -5px rgba(16, 185, 129, 0.28);
   position: relative;
-  animation: modalZoomIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
   transform-origin: center center;
+  animation: modalEyeCatchingIn 0.44s cubic-bezier(0.175, 0.885, 0.32, 1.175) forwards;
+  will-change: transform, opacity;
 }
 
 .team-modal-dialog.closing {
-  animation: modalZoomOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modalEyeCatchingOut 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
 }
 
-@keyframes modalZoomIn {
+@keyframes modalEyeCatchingIn {
   0% {
     opacity: 0;
-    transform: scale(0.88) translateY(24px);
+    transform: perspective(1200px) translateY(45px) scale(0.85) rotateX(12deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  70% {
+    transform: perspective(1200px) translateY(-5px) scale(1.018) rotateX(-1deg);
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: perspective(1200px) translateY(0) scale(1) rotateX(0deg);
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3),
+                0 30px 80px -15px rgba(3, 30, 21, 0.55),
+                0 0 45px -5px rgba(16, 185, 129, 0.28);
   }
 }
 
-@keyframes modalZoomOut {
+@keyframes modalEyeCatchingOut {
   0% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: perspective(1200px) translateY(0) scale(1) rotateX(0deg);
   }
   100% {
     opacity: 0;
-    transform: scale(0.88) translateY(18px);
+    transform: perspective(1200px) translateY(30px) scale(0.9) rotateX(-8deg);
+  }
+}
+
+/* Radiant top emerald laser accent sweep */
+.team-modal-dialog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 3.5px;
+  background: linear-gradient(90deg, transparent, #10b981, #34d399, #059669, transparent);
+  border-radius: 999px;
+  animation: modalGlowSweep 3s ease-in-out infinite alternate;
+  z-index: 5;
+}
+
+@keyframes modalGlowSweep {
+  0% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.5));
+    transform: scaleX(0.85);
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.95));
+    transform: scaleX(1.02);
   }
 }
 
@@ -334,26 +401,29 @@
   position: absolute;
   top: 1.4rem;
   right: 1.4rem;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: none;
-  background: #f1f5f9;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f8fafc;
   color: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
   z-index: 10;
-  animation: closeBtnSpinIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  animation: closeBtnEyeCatchingIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both;
 }
 
-@keyframes closeBtnSpinIn {
+@keyframes closeBtnEyeCatchingIn {
   0% {
     opacity: 0;
-    transform: scale(0.5) rotate(-90deg);
+    transform: scale(0.3) rotate(-180deg);
   }
   100% {
     opacity: 1;
@@ -365,12 +435,17 @@
   background: #fee2e2;
   color: #dc2626;
   transform: rotate(90deg) scale(1.15);
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+}
+
+.team-modal-close-btn:active {
+  transform: rotate(90deg) scale(0.92);
 }
 
 .team-modal-inner {
   display: flex;
   flex-direction: row;
-  padding: 2.6rem;
+  padding: 2.8rem 2.6rem;
   gap: 2.5rem;
 }
 
@@ -381,10 +456,9 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  animation: infoContentFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Member Image with Zoom In & Zoom Out Pulse Animation (No Rotation) */
+/* Member Image with Zoom In & Zoom Out Pulse Animation + Elastic Entrance */
 .team-modal-pic-box {
   width: 170px;
   height: 170px;
@@ -392,9 +466,24 @@
   padding: 5px;
   background: linear-gradient(135deg, #10b981, #059669);
   box-shadow: 0 12px 28px rgba(5, 150, 105, 0.32);
-  margin-bottom: 1.2rem;
-  animation: imageZoomInOut 3.6s ease-in-out infinite;
+  margin-bottom: 1.3rem;
+  animation: modalAvatarPopIn 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both,
+             imageZoomInOut 3.6s ease-in-out 0.6s infinite;
   will-change: transform;
+}
+
+@keyframes modalAvatarPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) translateY(20px);
+  }
+  75% {
+    transform: scale(1.1) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes imageZoomInOut {
@@ -403,7 +492,7 @@
     box-shadow: 0 12px 28px rgba(5, 150, 105, 0.28);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.07);
     box-shadow: 0 20px 42px rgba(16, 185, 129, 0.48);
   }
 }
@@ -424,7 +513,7 @@
 .team-modal-badges {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
   width: 100%;
 }
 
@@ -432,31 +521,45 @@
   background: #f8faf9;
   border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 12px;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.8rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #1e3a2f;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   text-align: left;
+  animation: badgeSlideIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
 }
 
-/* Staggered Animated Info Entrance on View Details Click */
-.team-modal-main {
-  flex: 1;
-  animation: infoContentFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+.team-modal-badge:nth-child(1) {
+  animation-delay: 0.18s;
+}
+.team-modal-badge:nth-child(2) {
+  animation-delay: 0.26s;
 }
 
-@keyframes infoContentFadeUp {
+.team-modal-badge:hover {
+  transform: translateX(4px);
+  background: #f0fdf7;
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+@keyframes badgeSlideIn {
   0% {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateX(-24px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
+}
+
+/* Main Content Staggered Animations */
+.team-modal-main {
+  flex: 1;
 }
 
 .team-modal-working-tag {
@@ -467,37 +570,54 @@
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  padding: 0.3rem 0.85rem;
+  padding: 0.32rem 0.9rem;
   border-radius: 9999px;
   margin-bottom: 0.6rem;
+  animation: elementFadeDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
 }
 
-.team-modal-heading-name {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.9rem;
-  font-weight: 800;
-  color: #072218;
-  margin-bottom: 1.2rem;
-  letter-spacing: -0.5px;
-}
-
-.team-modal-detail-block {
-  margin-bottom: 1.4rem;
-  animation: detailBlockStagger 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.team-modal-detail-block:nth-child(2) { animation-delay: 0.14s; }
-.team-modal-detail-block:nth-child(3) { animation-delay: 0.22s; }
-
-@keyframes detailBlockStagger {
+@keyframes elementFadeDown {
   0% {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(-12px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.team-modal-heading-name {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #072218;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.5px;
+  animation: elementFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+@keyframes elementFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.team-modal-detail-block {
+  margin-bottom: 1.4rem;
+  animation: elementFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.team-modal-detail-block:nth-of-type(1) {
+  animation-delay: 0.22s;
+}
+.team-modal-detail-block:nth-of-type(2) {
+  animation-delay: 0.3s;
 }
 
 .detail-section-title {
@@ -516,20 +636,48 @@
   margin: 0;
 }
 
+/* Staggered bouncing pop for expertise pills */
 .expertise-pill-tag {
   background: #f1fbf7;
   border: 1px solid rgba(16, 185, 129, 0.25);
   color: #073824;
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 0.35rem 0.8rem;
+  padding: 0.38rem 0.85rem;
   border-radius: 9999px;
-  transition: transform 0.2s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease,
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
+  animation: pillSpringIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(0.26s + var(--pill-idx, 0) * 0.055s);
+}
+
+@keyframes pillSpringIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(10px);
+  }
+  75% {
+    transform: scale(1.08) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .expertise-pill-tag:hover {
-  transform: translateY(-2px);
-  background: #e1f7ee;
+  transform: translateY(-3px) scale(1.04);
+  background: #dcfce7;
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.team-modal-actions {
+  animation: elementFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both;
 }
 
 @media (max-width: 768px) {
