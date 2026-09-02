@@ -1,8 +1,20 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './AiTools.css'
 
 export default function AiTools({ onOpenModal }) {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
   const [activeTab, setActiveTab] = useState('all')
+
+  const handleAction = () => {
+    if (isAuthenticated) {
+      if (onOpenModal) onOpenModal()
+    } else {
+      navigate('/signup')
+    }
+  }
 
   const tools = [
     {
@@ -55,14 +67,14 @@ export default function AiTools({ onOpenModal }) {
     }
   ]
 
-  const filteredTools = activeTab === 'all' 
-    ? tools 
+  const filteredTools = activeTab === 'all'
+    ? tools
     : tools.filter(t => t.category === activeTab)
 
   return (
     <div className="ai-tools-page py-4">
       <div className="container">
-        
+
         {/* Header */}
         <div className="page-hero-header">
           <span className="section-tag">SPECIALIZED TOOLKIT</span>
@@ -77,9 +89,8 @@ export default function AiTools({ onOpenModal }) {
           {['all', 'research', 'procedural', 'constitutional', 'drafting', 'trial', 'criminal'].map((cat) => (
             <button
               key={cat}
-              className={`btn btn-sm rounded-pill px-3 py-2 fw-semibold ${
-                activeTab === cat ? 'btn-success' : 'btn-outline-secondary'
-              }`}
+              className={`btn btn-sm rounded-pill px-3 py-2 fw-semibold ${activeTab === cat ? 'btn-success' : 'btn-outline-secondary'
+                }`}
               onClick={() => setActiveTab(cat)}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -100,9 +111,9 @@ export default function AiTools({ onOpenModal }) {
                 </span>
                 <h3 className="feature-card-heading">{t.title}</h3>
                 <p className="feature-card-text">{t.desc}</p>
-                <button 
+                <button
                   className="tool-interactive-demo-btn"
-                  onClick={onOpenModal}
+                  onClick={handleAction}
                 >
                   <span>Launch Tool</span>
                   <i className="bi bi-arrow-up-right"></i>
@@ -118,7 +129,7 @@ export default function AiTools({ onOpenModal }) {
           <p className="text-muted mb-4">
             We integrate with private chamber files, case management systems, and specialized arbitral rules.
           </p>
-          <button className="btn-emerald" onClick={onOpenModal}>
+          <button className="btn-emerald" onClick={handleAction}>
             <i className="bi bi-chat-dots-fill"></i>
             <span>Schedule Legal Tech Consultation</span>
           </button>

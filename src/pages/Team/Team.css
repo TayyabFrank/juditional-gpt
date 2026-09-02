@@ -1,17 +1,19 @@
 /* ==========================================================================
-   Team Page Styles - Minimal Card (Pic, Name, Working) + Interactive Details Modal
+   Team Page Styles - Minimal Card (Pic & Name) + Eye-Catching Animations
    ========================================================================== */
 
 .team-card-minimal {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1.5px solid rgba(255, 255, 255, 0.95);
-  border-radius: 24px;
-  padding: 2.4rem 1.6rem 1.8rem 1.6rem;
+  border-radius: 28px;
+  padding: 2.6rem 1.6rem 2.2rem 1.6rem;
   box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
   text-align: center;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   height: 100%;
   cursor: pointer;
   display: flex;
@@ -19,30 +21,116 @@
   align-items: center;
   position: relative;
   overflow: hidden;
+  /* Hardware acceleration to completely eliminate redraw flickering */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: box-shadow, border-color;
 }
 
+/* 3D elevation and emerald glow on hover (Smooth, no transform fighting) */
 .team-card-minimal:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 24px 50px rgba(5, 59, 41, 0.14);
-  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 28px 60px rgba(5, 75, 50, 0.18), 0 0 30px rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.6);
+  background: rgba(255, 255, 255, 0.96);
 }
 
-/* Picture Container */
+/* Glass-sheen light beam sweep */
+.team-card-minimal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.team-card-minimal:hover::before {
+  left: 160%;
+}
+
+/* Picture Container with animated multi-layer rings */
 .team-pic-container {
-  width: 140px;
-  height: 140px;
+  width: 146px;
+  height: 146px;
   border-radius: 50%;
   position: relative;
   margin: 0 auto 1.4rem auto;
-  padding: 4px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 10px 24px rgba(5, 150, 105, 0.28);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .team-card-minimal:hover .team-pic-container {
   transform: scale(1.06);
-  box-shadow: 0 14px 32px rgba(5, 150, 105, 0.4);
+}
+
+/* 1. Animated Conic Halo Spinner */
+.team-pic-halo-spinner {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #10b981,
+    #059669,
+    #34d399,
+    #0f766e,
+    #10b981
+  );
+  z-index: 1;
+  animation: spinHalo 6s linear infinite;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.team-card-minimal:hover .team-pic-halo-spinner {
+  opacity: 1;
+  filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.7));
+}
+
+@keyframes spinHalo {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 2. Radar Ring Pulse */
+.team-pic-radar-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 185, 129, 0.45);
+  z-index: 0;
+  opacity: 0;
+  animation: radarRingPulse 3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes radarRingPulse {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  65%, 100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
 }
 
 .team-member-pic {
@@ -50,8 +138,11 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #ffffff;
+  border: 3.5px solid #ffffff;
   display: block;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .team-member-fallback-initials {
@@ -65,114 +156,154 @@
   justify-content: center;
   font-size: 2.5rem;
   font-weight: 800;
-  border: 3px solid #ffffff;
+  border: 3.5px solid #ffffff;
+  position: relative;
+  z-index: 2;
 }
 
-/* Floating Eye/View Badge on Pic */
+/* Floating Eye/View Badge on Pic with radar wave */
 .team-pic-badge {
   position: absolute;
   bottom: 4px;
   right: 4px;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #059669;
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   border: 2.5px solid #ffffff;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+  z-index: 4;
 }
 
 .team-card-minimal:hover .team-pic-badge {
-  transform: scale(1.15);
+  transform: scale(1.2) rotate(12deg);
   background: #047857;
 }
 
-/* Name */
+.badge-radar-ping {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.5);
+  animation: badgePing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+
+@keyframes badgePing {
+  70%, 100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* Name with animated expanding underline */
+.team-name-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
 .team-member-name {
   font-family: var(--font-serif), Georgia, serif;
   font-size: 1.25rem;
   font-weight: 800;
   color: #072218;
-  margin-top: 0.2rem;
   margin-bottom: 0;
   line-height: 1.3;
+  transition: color 0.2s ease;
 }
 
-/* Working / Role */
-.team-member-working {
+.team-card-minimal:hover .team-member-name {
   color: #059669;
-  font-weight: 700;
-  font-size: 0.84rem;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-bottom: 1.2rem;
-  line-height: 1.4;
 }
 
-/* Subtle Click prompt */
-.team-card-click-label {
-  margin-top: auto;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #406958;
-  opacity: 0.75;
-  transition: opacity 0.2s ease, color 0.2s ease;
+.team-name-underline {
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 999px;
+  margin: 6px auto 0 auto;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-card-minimal:hover .team-name-underline {
+  width: 55px;
+}
+
+/* Micro-interaction Hover Tag */
+.team-card-hover-tag {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 0.95rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #059669;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.25rem 0.85rem;
+  border-radius: 9999px;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  letter-spacing: 0.3px;
 }
 
-.team-card-minimal:hover .team-card-click-label {
+.team-card-minimal:hover .team-card-hover-tag {
   opacity: 1;
-  color: #059669;
+  transform: translateY(0);
 }
 
 /* ==========================================================================
-   Interactive Details Modal
+   Interactive Details Modal with 3D Spring Animation
    ========================================================================== */
 .team-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(5, 34, 24, 0.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(4, 28, 20, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 1080;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  animation: modalFadeIn 0.25s ease-out;
+  animation: modalBackdropFade 0.3s ease-out;
 }
 
-@keyframes modalFadeIn {
+@keyframes modalBackdropFade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 .team-modal-dialog {
   background: #ffffff;
-  border-radius: 28px;
+  border-radius: 30px;
   max-width: 780px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 30px 80px rgba(5, 45, 32, 0.35);
+  box-shadow: 0 35px 90px rgba(5, 45, 32, 0.4);
   position: relative;
-  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1.5px solid rgba(16, 185, 129, 0.2);
+  animation: modalSpring 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
 }
 
-@keyframes modalSlideUp {
-  from {
+@keyframes modalSpring {
+  0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(35px) scale(0.92);
   }
-  to {
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.01);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
@@ -200,13 +331,13 @@
 .team-modal-close-btn:hover {
   background: #fee2e2;
   color: #dc2626;
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.1);
 }
 
 .team-modal-inner {
   display: flex;
   flex-direction: row;
-  padding: 2.5rem;
+  padding: 2.6rem;
   gap: 2.5rem;
 }
 
@@ -224,9 +355,10 @@
   height: 170px;
   border-radius: 50%;
   padding: 5px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 12px 28px rgba(5, 150, 105, 0.28);
+  background: conic-gradient(from 0deg, #10b981, #059669, #34d399, #10b981);
+  box-shadow: 0 12px 28px rgba(5, 150, 105, 0.32);
   margin-bottom: 1.2rem;
+  animation: spinHalo 10s linear infinite;
 }
 
 .team-modal-pic {
@@ -316,6 +448,12 @@
   font-weight: 600;
   padding: 0.35rem 0.8rem;
   border-radius: 9999px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.expertise-pill-tag:hover {
+  transform: translateY(-2px);
+  background: #e1f7ee;
 }
 
 @media (max-width: 768px) {

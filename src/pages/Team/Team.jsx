@@ -1,55 +1,79 @@
 import React, { useState } from 'react'
 import './Team.css'
+import Tilt3D from '../../components/Tilt3D'
 
 export default function Team({ onOpenModal }) {
   const [selectedMember, setSelectedMember] = useState(null)
 
   const teamMembers = [
     {
-      id: 'zafarullah',
-      name: 'Barrister Zafarullah Khan',
-      initials: 'ZK',
-      role: 'Lead Jurisprudence Advisor',
-      image: '/team/zafarullah.jpg',
-      institution: 'Lincoln’s Inn / Supreme Court of Pakistan',
-      experience: '28+ Years Senior Advocate',
-      specialties: ['Constitutional Law', 'Appellate Litigation', 'Judicial Precedent Ratios', 'Statutory Interpretation'],
-      desc: 'Former Advocate General & Supreme Court Senior Advocate with 28+ years arguing constitutional, administrative, and corporate appeals before the Supreme Court of Pakistan. Guides the JudicialGPT reasoning engine on precedent hierarchy, ratio decidendi validation, and common law doctrine.'
-    },
-    {
-      id: 'tariq',
-      name: 'Dr. Tariq Mahmood',
-      initials: 'TM',
-      role: 'Chief AI Architect & NLP Director',
-      image: '/team/tariq.jpg',
-      institution: 'NCAI & National Center of AI',
-      experience: '18+ Years in Machine Learning',
-      specialties: ['Bilingual Legal NLP', 'Urdu Semantic Embeddings', 'RAG Neural Pipelines', 'Hallucination Mitigation'],
-      desc: 'PhD in Natural Language Processing, specialized in bilingual Urdu-English semantic embeddings and retrieval-augmented neural models. Designed the foundational vector indexing architecture over 2.4 million Pakistani reported judicial volumes.'
+      id: 'usman',
+      name: 'Prof Dr. Usman Ghani Khan',
+      initials: 'UK',
+      role: 'Founder',
+      image: '/team/usman.jpeg',
+      institution: 'NCAI & UET Lahore',
+      experience: '20+ Years AI & Computer Science',
+      specialties: ['AI Strategy', 'Machine Learning', 'Computer Vision', 'Executive Leadership'],
+      desc: 'Founded JudicialGPT to make quality legal assistance accessible through AI. Sets company strategy, product vision, and partnerships while guiding the team to build trustworthy legal technology.'
     },
     {
       id: 'ayesha',
-      name: 'Ayesha Siddiqua',
-      initials: 'AS',
-      role: 'Head of Legal Informatics',
-      image: '/team/ayesha.jpg',
-      institution: 'Harvard Law School / HCBA',
-      experience: '12+ Years Legal Practice & Research',
-      specialties: ['Legal Corpus Curation', 'Ratio Decidendi Tagging', 'High Court Rules & Orders', 'Ethical Legal AI'],
-      desc: 'LLM from Harvard Law School; leads corpus curation, ratio decidendi annotation, and statutory verification pipelines. Spearheads collaboration with High Court Bar Associations and ensures chamber-grade ethical compliance.'
+      name: 'Ayesha Azam',
+      initials: 'AA',
+      role: 'Team Lead',
+      image: '/team/ayesha.png',
+      institution: 'NCAI & National Center of AI',
+      experience: 'Team & Project Management',
+      specialties: ['Agile Delivery', 'Product Engineering', 'Sprint Planning', 'Cross-functional Collaboration'],
+      desc: 'Coordinates engineering delivery, sprint planning, and cross-functional collaboration to ship reliable AI-powered legal features on time and at scale.'
     },
     {
-      id: 'bilal',
-      name: 'Bilal Ahmad Farooqi',
-      initials: 'BF',
-      role: 'Principal Systems Engineer',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
-      institution: 'Fast-NUCES Legal Tech Lab',
-      experience: '10+ Years Distributed Systems',
-      specialties: ['Sub-Second Legal Retrieval', 'OCR Digitization Tuning', 'Distributed Indexing', 'Confidential Cloud Enclaves'],
-      desc: 'Specialist in low-latency distributed search indexing 2.4 million scanned judicial PDF records with OCR accuracy tuning. Architected the high-throughput RAG search infrastructure powering sub-second case law retrieval.'
+      id: 'ali',
+      name: 'Syed Ali Hassan',
+      initials: 'AH',
+      role: 'Lead Developer / AI Engineer',
+      image: '/team/ali.jpg',
+      institution: 'NCAI Legal Tech Lab',
+      experience: 'Full-Stack & LLM Architecture',
+      specialties: ['Platform Architecture', 'LLM Fine-Tuning', 'Document Parsing', 'Vector Search Pipelines'],
+      desc: 'Architects the full-stack platform and fine-tunes AI models for legal document analysis, case summarization, and intelligent query responses.'
+    },
+    {
+      id: 'laiba',
+      name: 'Laiba Saleem',
+      initials: 'LS',
+      role: 'Data Analyst',
+      image: '/team/laiba.png',
+      institution: 'NCAI Data Intelligence',
+      experience: 'Data Analytics & Model Insights',
+      specialties: ['Dataset Patterns', 'Model Evaluation', 'User Engagement Metrics', 'Insight Dashboards'],
+      desc: 'Analyzes user engagement metrics, legal dataset patterns, and AI model performance to drive data-informed product decisions and improvements.'
+    },
+    {
+      id: 'zubaid',
+      name: 'Zubaid Rasool',
+      initials: 'ZR',
+      role: 'Full-Stack & DevOps Engineer',
+      image: '/team/zubaid.png',
+      institution: 'NCAI Infrastructure Engineering',
+      experience: 'Cloud & DevOps Engineering',
+      specialties: ['CI/CD Pipelines', 'Cloud Deployments', 'Containerization', 'Scalable Backend APIs'],
+      desc: 'Builds and maintains frontend and backend features while managing CI/CD pipelines, server infrastructure, and deployment workflows on the cloud.'
+    },
+    {
+      id: 'nasir',
+      name: 'Dr. Abdul Nasir',
+      initials: 'AN',
+      role: 'Legal Domain Expert',
+      image: '/team/nasir.jpg',
+      institution: 'Pakistan Legal Bar & Judicial Academia',
+      experience: 'Senior Legal Practice & Research',
+      specialties: ['Judicial Precedent Analysis', 'Court Practice Procedures', 'Statutory Verification', 'Legal Domain Alignment'],
+      desc: 'A legal practitioner for providing judicial domain expertise to validate legal accuracy, guide court-relevant content, and ensure JudicialGPT meets professional standards.'
     }
   ]
+
 
   return (
     <div className="team-page py-4">
@@ -64,46 +88,63 @@ export default function Team({ onOpenModal }) {
           </p>
         </div>
 
-        {/* Team Grid: ONLY Display Pic and Name */}
+        {/* Team Grid: Display All 6 Team Members */}
         <div className="row g-4 mb-5 justify-content-center">
           {teamMembers.map((m) => (
-            <div key={m.id} className="col-sm-6 col-lg-3">
-              <div
-                className="team-card-minimal"
-                onClick={() => setSelectedMember(m)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    setSelectedMember(m)
-                  }
-                }}
-                title={`Click to read details of ${m.name}`}
-              >
-                {/* 1. Pic / Avatar */}
-                <div className="team-pic-container">
-                  <img
-                    src={m.image}
-                    alt={m.name}
-                    className="team-member-pic"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                      if (e.currentTarget.nextElementSibling) {
-                        e.currentTarget.nextElementSibling.style.display = 'flex'
-                      }
-                    }}
-                  />
-                  <div className="team-member-fallback-initials" style={{ display: 'none' }}>
-                    {m.initials}
+            <div key={m.id} className="col-12 col-sm-6 col-lg-4">
+              <Tilt3D maxTilt={10} scale={1.03} perspective={900} className="h-100">
+                <div
+                  className="team-card-minimal"
+                  onClick={() => setSelectedMember(m)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setSelectedMember(m)
+                    }
+                  }}
+                  title={`Click to read details of ${m.name}`}
+                >
+                  {/* 1. Pic / Avatar with Animated Halo & Radar */}
+                  <div className="team-pic-container">
+                    <div className="team-pic-halo-spinner"></div>
+                    <div className="team-pic-radar-pulse"></div>
+                    <img
+                      src={m.image}
+                      alt={m.name}
+                      className="team-member-pic"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                        if (e.currentTarget.nextElementSibling) {
+                          e.currentTarget.nextElementSibling.style.display = 'flex'
+                        }
+                      }}
+                    />
+                    <div className="team-member-fallback-initials" style={{ display: 'none' }}>
+                      {m.initials}
+                    </div>
+                    <div className="team-pic-badge" title="Click to view details">
+                      <span className="badge-radar-ping"></span>
+                      <i className="bi bi-eye-fill"></i>
+                    </div>
                   </div>
-                  <div className="team-pic-badge" title="Click to view details">
-                    <i className="bi bi-eye-fill"></i>
+
+                  {/* 2. Name with Animated Underline */}
+                  <div className="team-name-wrapper text-center">
+                    <h4 className="team-member-name mb-1">{m.name}</h4>
+                    <span className="team-member-role-badge" style={{ fontSize: '0.84rem', color: '#059669', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                      {m.role}
+                    </span>
+                    <div className="team-name-underline"></div>
+                  </div>
+
+                  {/* Micro-interaction Hover Tag */}
+                  <div className="team-card-hover-tag">
+                    <i className="bi bi-sparkles text-success me-1"></i>
+                    <span>View Details</span>
                   </div>
                 </div>
-
-                {/* 2. Name */}
-                <h4 className="team-member-name mb-0">{m.name}</h4>
-              </div>
+              </Tilt3D>
             </div>
           ))}
         </div>
@@ -230,6 +271,6 @@ export default function Team({ onOpenModal }) {
         </div>
 
       </div>
-    </div>
+    </div >
   )
 }

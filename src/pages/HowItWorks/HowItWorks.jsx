@@ -1,8 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './HowItWorks.css'
 
 export default function HowItWorks({ onOpenModal }) {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+
+  const handleAction = () => {
+    if (isAuthenticated) {
+      if (onOpenModal) onOpenModal()
+    } else {
+      navigate('/signup')
+    }
+  }
+
   const steps = [
     {
       num: '01',
@@ -112,7 +124,7 @@ export default function HowItWorks({ onOpenModal }) {
 
         {/* Action button */}
         <div className="text-center mb-4">
-          <button className="btn-emerald fs-6" onClick={onOpenModal}>
+          <button className="btn-emerald fs-6" onClick={handleAction}>
             <i className="bi bi-play-circle-fill"></i>
             <span>Test the Search Pipeline Live</span>
           </button>

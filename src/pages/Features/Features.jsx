@@ -1,8 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './Features.css'
+import Tilt3D from '../../components/Tilt3D'
 
 export default function Features({ onOpenModal }) {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+
+  const handleTryFree = () => {
+    if (isAuthenticated) {
+      if (onOpenModal) onOpenModal()
+    } else {
+      navigate('/signup')
+    }
+  }
+
   const featureList = [
     {
       badge: 'Database & Reports',
@@ -75,7 +88,7 @@ export default function Features({ onOpenModal }) {
   return (
     <div className="features-page-view py-4">
       <div className="container">
-        
+
         {/* Header Matching Screenshot */}
         <div className="features-header-block text-center">
           <div className="features-pill-badge">
@@ -95,23 +108,25 @@ export default function Features({ onOpenModal }) {
         <div className="row g-4 mt-2 mb-5">
           {featureList.map((item, idx) => (
             <div key={idx} className="col-md-6 col-lg-4">
-              <div className="feature-detail-card">
-                <span className="feature-badge-label">{item.badge}</span>
-                <div className="feature-icon-circle">
-                  <i className={`bi ${item.icon}`}></i>
+              <Tilt3D maxTilt={8} scale={1.02} perspective={1000} className="h-100">
+                <div className="feature-detail-card">
+                  <span className="feature-badge-label">{item.badge}</span>
+                  <div className="feature-icon-circle">
+                    <i className={`bi ${item.icon}`}></i>
+                  </div>
+                  <h3 className="feature-card-heading">{item.title}</h3>
+                  <p className="feature-card-text">{item.description}</p>
+
+                  <ul className="feature-list-bullet">
+                    {item.bullets.map((b, i) => (
+                      <li key={i}>
+                        <i className="bi bi-check-circle-fill"></i>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="feature-card-heading">{item.title}</h3>
-                <p className="feature-card-text">{item.description}</p>
-                
-                <ul className="feature-list-bullet">
-                  {item.bullets.map((b, i) => (
-                    <li key={i}>
-                      <i className="bi bi-check-circle-fill"></i>
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </Tilt3D>
             </div>
           ))}
         </div>
@@ -123,7 +138,7 @@ export default function Features({ onOpenModal }) {
             Try our interactive assistant now or explore how JudicialGPT seamlessly searches statutes, precedents, and court records.
           </p>
           <div className="d-flex justify-content-center gap-3">
-            <button className="btn-emerald" onClick={onOpenModal}>
+            <button className="btn-emerald" onClick={handleTryFree}>
               <i className="bi bi-robot"></i>
               <span>Try AI Assistant Free</span>
             </button>

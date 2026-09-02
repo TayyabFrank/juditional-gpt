@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './Home.css'
+import Tilt3D from '../../components/Tilt3D'
 import Features from '../Features/Features'
 import HowItWorks from '../HowItWorks/HowItWorks'
 import AiTools from '../AiTools/AiTools'
@@ -68,6 +71,17 @@ const HERO_MODES = [
 ]
 
 export default function Home({ onOpenModal }) {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+
+  const handleTryFree = () => {
+    if (isAuthenticated) {
+      if (onOpenModal) onOpenModal()
+    } else {
+      navigate('/signup')
+    }
+  }
+
   const [langIndex, setLangIndex] = useState(0)
   const [typedQuery, setTypedQuery] = useState('')
   const [typedAnswer, setTypedAnswer] = useState('')
@@ -204,166 +218,170 @@ export default function Home({ onOpenModal }) {
 
               {/* Hero CTA Button */}
               <div>
-                <button className="btn-hero-assistant" onClick={onOpenModal}>
+                <button className="btn-hero-assistant" onClick={handleTryFree}>
                   <i className="bi bi-robot fs-5"></i>
                   <span>Try AI Assistant Free</span>
                   <i className="bi bi-arrow-right fs-5"></i>
                 </button>
               </div>
 
-              {/* Stats Glass Card: 4-in-a-row on desktop, 2x2 grid on mobile */}
-              <div className="stats-strip-card">
-                <div className="stats-grid-layout">
-                  <div className="stat-metric stat-metric-1">
-                    <div className="stat-big">2.4M</div>
-                    <div className="stat-desc">LEGAL DOCUMENTS</div>
-                  </div>
-                  <div className="stat-metric stat-metric-2">
-                    <div className="stat-big">10K</div>
-                    <div className="stat-desc">ACTIVE USERS</div>
-                  </div>
-                  <div className="stat-metric stat-metric-3">
-                    <div className="stat-big">Highest</div>
-                    <div className="stat-desc">BENCHMARK ACCURACY</div>
-                  </div>
-                  <div className="stat-metric stat-metric-4">
-                    <div className="stat-big">24/7</div>
-                    <div className="stat-desc">AI AVAILABILITY</div>
+              {/* Stats Glass Card with 3D Tilt */}
+              <Tilt3D maxTilt={7} scale={1.02} perspective={900}>
+                <div className="stats-strip-card">
+                  <div className="stats-grid-layout">
+                    <div className="stat-metric stat-metric-1">
+                      <div className="stat-big">2.4M</div>
+                      <div className="stat-desc">LEGAL DOCUMENTS</div>
+                    </div>
+                    <div className="stat-metric stat-metric-2">
+                      <div className="stat-big">10K</div>
+                      <div className="stat-desc">ACTIVE USERS</div>
+                    </div>
+                    <div className="stat-metric stat-metric-3">
+                      <div className="stat-big">Highest</div>
+                      <div className="stat-desc">BENCHMARK ACCURACY</div>
+                    </div>
+                    <div className="stat-metric stat-metric-4">
+                      <div className="stat-big">24/7</div>
+                      <div className="stat-desc">AI AVAILABILITY</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Tilt3D>
 
             </div>
 
-            {/* RIGHT COLUMN: Horizontally Increased Tablet Mockup & Child Boxes */}
-            <div className="col-lg-7 col-xl-7">
-              <div className="mockup-outer-wrapper">
-                <div className="tablet-device-card">
+            {/* RIGHT COLUMN: Interactive 3D Tablet Mockup (Hidden on mobile) */}
+            <div className="col-lg-7 col-xl-7 d-none d-lg-block">
+              <Tilt3D maxTilt={5} scale={1.01} perspective={1400} className="w-100">
+                <div className="mockup-outer-wrapper">
+                  <div className="tablet-device-card">
 
-                  {/* Tablet Top Bar: Language Tabs & Brand Seal */}
-                  <div className="mockup-top-nav">
-                    <div className="language-tabs-pill-row" role="tablist">
-                      {LANGUAGES.map((item, idx) => (
+                    {/* Tablet Top Bar: Language Tabs & Brand Seal */}
+                    <div className="mockup-top-nav">
+                      <div className="language-tabs-pill-row" role="tablist">
+                        {LANGUAGES.map((item, idx) => (
+                          <button
+                            key={item.id}
+                            className={`lang-button ${langIndex === idx ? 'active' : ''}`}
+                            onClick={() => handleSelectLanguage(idx)}
+                            role="tab"
+                            aria-selected={langIndex === idx}
+                          >
+                            <span>{item.label}</span>
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Right Brand Seal */}
+                      <div className="mockup-watermark-tag">
+                        <i className="bi bi-bank2"></i>
+                        <span>JUDICIALGPT</span>
+                      </div>
+                    </div>
+
+                    {/* DYNAMIC CHILD AREA: Expanded Horizontally */}
+                    <div className="tablet-body-dynamic">
+
+                      {/* Child Question Box - Horizontally Stretched */}
+                      <div className="mockup-search-container m-0">
+                        <div className="mockup-search-box">
+
+                          {/* LTR (English): Magnifying glass on LEFT */}
+                          {!isRtl && (
+                            <div className="search-icon-decor-left">
+                              <i className="bi bi-search"></i>
+                            </div>
+                          )}
+
+                          {/* RTL (Other languages): Arrow button on LEFT */}
+                          {isRtl && (
+                            <button
+                              className="search-action-circle-btn-right"
+                              title="Submit Legal Search"
+                              aria-label="Submit search"
+                            >
+                              <i className="bi bi-arrow-right"></i>
+                            </button>
+                          )}
+
+                          {/* Middle: Full Question Text */}
+                          <div
+                            className={`search-query-display-area ${isRtl ? 'rtl' : ''}`}
+                          >
+                            {typedQuery}
+                            {isQueryTyping && <span className="blinking-cursor"></span>}
+                          </div>
+
+                          {/* LTR (English): Arrow button on RIGHT */}
+                          {!isRtl && (
+                            <button
+                              className="search-action-circle-btn-right"
+                              title="Submit Legal Search"
+                              aria-label="Submit search"
+                            >
+                              <i className="bi bi-arrow-right"></i>
+                            </button>
+                          )}
+
+                          {/* RTL (Other languages): Magnifying glass on RIGHT */}
+                          {isRtl && (
+                            <div className="search-icon-decor-left">
+                              <i className="bi bi-search"></i>
+                            </div>
+                          )}
+
+                        </div>
+                      </div>
+
+                      {/* Child Answer Box - Horizontally Stretched */}
+                      <div className="mockup-response-container">
+                        <div className="response-layout-row">
+
+                          {/* LTR (English): Scales badge on LEFT */}
+                          {!isRtl && (
+                            <div className="mockup-floating-scale-badge-left" title="Judicial AI Verification">
+                              <i className="bi bi-bank2"></i>
+                            </div>
+                          )}
+
+                          {/* Dynamic Response panel */}
+                          <div className="mockup-response-panel">
+                            <div className={`response-live-text ${isRtl ? 'rtl' : ''}`}>
+                              {typedAnswer}
+                              {(isAnswerTyping || typedAnswer.length > 0) && (
+                                <span className="blinking-cursor"></span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* RTL (Other languages): Scales badge on RIGHT */}
+                          {isRtl && (
+                            <div className="mockup-floating-scale-badge-left" title="Judicial AI Verification">
+                              <i className="bi bi-bank2"></i>
+                            </div>
+                          )}
+
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Carousel Dots at Bottom of Mockup */}
+                    <div className="mockup-carousel-indicator-bar">
+                      {LANGUAGES.map((_, dotIdx) => (
                         <button
-                          key={item.id}
-                          className={`lang-button ${langIndex === idx ? 'active' : ''}`}
-                          onClick={() => handleSelectLanguage(idx)}
-                          role="tab"
-                          aria-selected={langIndex === idx}
-                        >
-                          <span>{item.label}</span>
-                        </button>
+                          key={dotIdx}
+                          className={`carousel-indicator-dot ${langIndex === dotIdx ? 'active' : ''}`}
+                          onClick={() => handleSelectLanguage(dotIdx)}
+                          aria-label={`Switch to ${LANGUAGES[dotIdx].label}`}
+                        ></button>
                       ))}
                     </div>
 
-                    {/* Right Brand Seal */}
-                    <div className="mockup-watermark-tag">
-                      <i className="bi bi-bank2"></i>
-                      <span>JUDICIALGPT</span>
-                    </div>
                   </div>
-
-                  {/* DYNAMIC CHILD AREA: Expanded Horizontally */}
-                  <div className="tablet-body-dynamic">
-
-                    {/* Child Question Box - Horizontally Stretched */}
-                    <div className="mockup-search-container m-0">
-                      <div className="mockup-search-box">
-
-                        {/* LTR (English): Magnifying glass on LEFT */}
-                        {!isRtl && (
-                          <div className="search-icon-decor-left">
-                            <i className="bi bi-search"></i>
-                          </div>
-                        )}
-
-                        {/* RTL (Other languages): Arrow button on LEFT */}
-                        {isRtl && (
-                          <button
-                            className="search-action-circle-btn-right"
-                            title="Submit Legal Search"
-                            aria-label="Submit search"
-                          >
-                            <i className="bi bi-arrow-right"></i>
-                          </button>
-                        )}
-
-                        {/* Middle: Full Question Text */}
-                        <div
-                          className={`search-query-display-area ${isRtl ? 'rtl' : ''}`}
-                        >
-                          {typedQuery}
-                          {isQueryTyping && <span className="blinking-cursor"></span>}
-                        </div>
-
-                        {/* LTR (English): Arrow button on RIGHT */}
-                        {!isRtl && (
-                          <button
-                            className="search-action-circle-btn-right"
-                            title="Submit Legal Search"
-                            aria-label="Submit search"
-                          >
-                            <i className="bi bi-arrow-right"></i>
-                          </button>
-                        )}
-
-                        {/* RTL (Other languages): Magnifying glass on RIGHT */}
-                        {isRtl && (
-                          <div className="search-icon-decor-left">
-                            <i className="bi bi-search"></i>
-                          </div>
-                        )}
-
-                      </div>
-                    </div>
-
-                    {/* Child Answer Box - Horizontally Stretched */}
-                    <div className="mockup-response-container">
-                      <div className="response-layout-row">
-
-                        {/* LTR (English): Scales badge on LEFT */}
-                        {!isRtl && (
-                          <div className="mockup-floating-scale-badge-left" title="Judicial AI Verification">
-                            <i className="bi bi-bank2"></i>
-                          </div>
-                        )}
-
-                        {/* Dynamic Response panel */}
-                        <div className="mockup-response-panel">
-                          <div className={`response-live-text ${isRtl ? 'rtl' : ''}`}>
-                            {typedAnswer}
-                            {(isAnswerTyping || typedAnswer.length > 0) && (
-                              <span className="blinking-cursor"></span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* RTL (Other languages): Scales badge on RIGHT */}
-                        {isRtl && (
-                          <div className="mockup-floating-scale-badge-left" title="Judicial AI Verification">
-                            <i className="bi bi-bank2"></i>
-                          </div>
-                        )}
-
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Carousel Dots at Bottom of Mockup */}
-                  <div className="mockup-carousel-indicator-bar">
-                    {LANGUAGES.map((_, dotIdx) => (
-                      <button
-                        key={dotIdx}
-                        className={`carousel-indicator-dot ${langIndex === dotIdx ? 'active' : ''}`}
-                        onClick={() => handleSelectLanguage(dotIdx)}
-                        aria-label={`Switch to ${LANGUAGES[dotIdx].label}`}
-                      ></button>
-                    ))}
-                  </div>
-
                 </div>
-              </div>
+              </Tilt3D>
             </div>
 
           </div>

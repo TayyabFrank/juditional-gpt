@@ -8,6 +8,11 @@ export default function BackgroundGlow() {
       <div className="radial-glow glow-2"></div>
       <div className="radial-glow glow-3"></div>
 
+      {/* Floating 3D Depth Crystals & Holographic Orbs */}
+      <div className="ambient-3d-crystal crystal-1" aria-hidden="true"></div>
+      <div className="ambient-3d-crystal crystal-2" aria-hidden="true"></div>
+      <div className="ambient-3d-crystal crystal-3" aria-hidden="true"></div>
+
       {/* Center Backdrop: AI Head Silhouette + Scales of Justice + Floating Holographic Cyber Badges */}
       <div className="bg-watermark-scales">
         <svg viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg" className="watermark-svg">
