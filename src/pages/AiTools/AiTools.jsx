@@ -72,7 +72,7 @@ export default function AiTools({ onOpenModal }) {
     : tools.filter(t => t.category === activeTab)
 
   return (
-    <div className="ai-tools-page py-4">
+    <div className="ai-tools-page py-1">
       <div className="container">
 
         {/* Header */}
@@ -85,7 +85,7 @@ export default function AiTools({ onOpenModal }) {
         </div>
 
         {/* Filter Tabs */}
-        <div className="d-flex justify-content-center flex-wrap gap-2 mb-5">
+        <div className="d-flex justify-content-center flex-wrap gap-2 mb-3">
           {['all', 'research', 'procedural', 'constitutional', 'drafting', 'trial', 'criminal'].map((cat) => (
             <button
               key={cat}
@@ -99,7 +99,7 @@ export default function AiTools({ onOpenModal }) {
         </div>
 
         {/* Tools Grid */}
-        <div className="row g-4 mb-5">
+        <div className="row g-4 mb-3">
           {filteredTools.map((t) => (
             <div key={t.id} className="col-md-6 col-lg-4">
               <div className="tool-suite-card">
@@ -124,9 +124,9 @@ export default function AiTools({ onOpenModal }) {
         </div>
 
         {/* Bottom banner */}
-        <div className="p-5 rounded-4 glass-card text-center mb-4">
+        <div className="p-4 rounded-4 glass-card text-center mb-1">
           <h3 className="fw-bold mb-2">Need a custom AI tool for your law firm or chamber?</h3>
-          <p className="text-muted mb-4">
+          <p className="text-muted mb-3">
             We integrate with private chamber files, case management systems, and specialized arbitral rules.
           </p>
           <button className="btn-emerald" onClick={handleAction}>

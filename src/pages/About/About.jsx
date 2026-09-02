@@ -3,7 +3,7 @@ import './About.css'
 
 export default function About({ onOpenModal }) {
   return (
-    <div className="about-page py-4">
+    <div className="about-page py-1">
       <div className="container">
         
         {/* Header */}
@@ -60,7 +60,7 @@ export default function About({ onOpenModal }) {
         </div>
 
         {/* Core Principles */}
-        <div className="row g-4 mb-5">
+        <div className="row g-4 mb-3">
           <div className="col-md-4">
             <div className="feature-glass-box">
               <div className="feature-icon-circle">

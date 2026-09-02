@@ -86,7 +86,7 @@ export default function Features({ onOpenModal }) {
   ]
 
   return (
-    <div className="features-page-view py-4">
+    <div className="features-page-view py-1">
       <div className="container">
 
         {/* Header Matching Screenshot */}
@@ -105,16 +105,18 @@ export default function Features({ onOpenModal }) {
         </div>
 
         {/* Features Grid */}
-        <div className="row g-4 mt-2 mb-5">
+        <div className="row g-4 mt-1 mb-3">
           {featureList.map((item, idx) => (
             <div key={idx} className="col-md-6 col-lg-4">
               <Tilt3D maxTilt={8} scale={1.02} perspective={1000} className="h-100">
                 <div className="feature-detail-card">
                   <span className="feature-badge-label">{item.badge}</span>
-                  <div className="feature-icon-circle">
-                    <i className={`bi ${item.icon}`}></i>
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="feature-icon-circle-lg">
+                      <i className={`bi ${item.icon}`}></i>
+                    </div>
+                    <h3 className="feature-card-heading mb-0">{item.title}</h3>
                   </div>
-                  <h3 className="feature-card-heading">{item.title}</h3>
                   <p className="feature-card-text">{item.description}</p>
 
                   <ul className="feature-list-bullet">
@@ -132,7 +134,7 @@ export default function Features({ onOpenModal }) {
         </div>
 
         {/* CTA Bar */}
-        <div className="p-5 rounded-4 text-center glass-card mt-5 mb-4">
+        <div className="p-4 rounded-4 text-center glass-card mt-3 mb-1">
           <h2 className="fw-bold mb-3 text-dark">Ready to elevate your legal research?</h2>
           <p className="text-muted max-w-600 mx-auto mb-4">
             Try our interactive assistant now or explore how JudicialGPT seamlessly searches statutes, precedents, and court records.

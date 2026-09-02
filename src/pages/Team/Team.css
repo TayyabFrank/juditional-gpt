@@ -260,7 +260,7 @@
 }
 
 /* ==========================================================================
-   Interactive Details Modal with 3D Spring Animation
+   Interactive Details Modal with Zoom & Staggered Animations
    ========================================================================== */
 .team-modal-backdrop {
   position: fixed;
@@ -273,12 +273,21 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  animation: modalBackdropFade 0.3s ease-out;
+  animation: modalBackdropFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes modalBackdropFade {
+.team-modal-backdrop.closing {
+  animation: modalBackdropFadeOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalBackdropFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes modalBackdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 .team-modal-dialog {
@@ -290,22 +299,34 @@
   overflow-y: auto;
   box-shadow: 0 35px 90px rgba(5, 45, 32, 0.4);
   position: relative;
-  animation: modalSpring 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: modalZoomIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   border: 1.5px solid rgba(16, 185, 129, 0.25);
+  transform-origin: center center;
 }
 
-@keyframes modalSpring {
+.team-modal-dialog.closing {
+  animation: modalZoomOut 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalZoomIn {
   0% {
     opacity: 0;
-    transform: translateY(35px) scale(0.92);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-4px) scale(1.01);
+    transform: scale(0.88) translateY(24px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalZoomOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.88) translateY(18px);
   }
 }
 
@@ -324,14 +345,26 @@
   justify-content: center;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 10;
+  animation: closeBtnSpinIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+@keyframes closeBtnSpinIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 .team-modal-close-btn:hover {
   background: #fee2e2;
   color: #dc2626;
-  transform: rotate(90deg) scale(1.1);
+  transform: rotate(90deg) scale(1.15);
 }
 
 .team-modal-inner {
@@ -348,17 +381,31 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  animation: infoContentFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Member Image with Zoom In & Zoom Out Pulse Animation (No Rotation) */
 .team-modal-pic-box {
   width: 170px;
   height: 170px;
   border-radius: 50%;
   padding: 5px;
-  background: conic-gradient(from 0deg, #10b981, #059669, #34d399, #10b981);
+  background: linear-gradient(135deg, #10b981, #059669);
   box-shadow: 0 12px 28px rgba(5, 150, 105, 0.32);
   margin-bottom: 1.2rem;
-  animation: spinHalo 10s linear infinite;
+  animation: imageZoomInOut 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes imageZoomInOut {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 12px 28px rgba(5, 150, 105, 0.28);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 20px 42px rgba(16, 185, 129, 0.48);
+  }
 }
 
 .team-modal-pic {
@@ -367,6 +414,7 @@
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #ffffff;
+  transition: transform 0.3s ease;
 }
 
 .team-large-initials {
@@ -394,8 +442,21 @@
   text-align: left;
 }
 
+/* Staggered Animated Info Entrance on View Details Click */
 .team-modal-main {
   flex: 1;
+  animation: infoContentFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+@keyframes infoContentFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .team-modal-working-tag {
@@ -422,6 +483,21 @@
 
 .team-modal-detail-block {
   margin-bottom: 1.4rem;
+  animation: detailBlockStagger 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.team-modal-detail-block:nth-child(2) { animation-delay: 0.14s; }
+.team-modal-detail-block:nth-child(3) { animation-delay: 0.22s; }
+
+@keyframes detailBlockStagger {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .detail-section-title {

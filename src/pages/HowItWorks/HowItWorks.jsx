@@ -49,7 +49,7 @@ export default function HowItWorks({ onOpenModal }) {
   ]
 
   return (
-    <div className="how-it-works-page py-4">
+    <div className="how-it-works-page py-1">
       <div className="container">
         
         {/* Header */}
@@ -62,7 +62,7 @@ export default function HowItWorks({ onOpenModal }) {
         </div>
 
         {/* 3 Step Cards */}
-        <div className="row g-4 mt-2 mb-5">
+        <div className="row g-4 mt-1 mb-3">
           {steps.map((s, idx) => (
             <div key={idx} className="col-md-4">
               <div className="workflow-timeline-card">
@@ -123,7 +123,7 @@ export default function HowItWorks({ onOpenModal }) {
         </div>
 
         {/* Action button */}
-        <div className="text-center mb-4">
+        <div className="text-center mb-1">
           <button className="btn-emerald fs-6" onClick={handleAction}>
             <i className="bi bi-play-circle-fill"></i>
             <span>Test the Search Pipeline Live</span>

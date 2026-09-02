@@ -4,6 +4,15 @@ import Tilt3D from '../../components/Tilt3D'
 
 export default function Team({ onOpenModal }) {
   const [selectedMember, setSelectedMember] = useState(null)
+  const [isClosing, setIsClosing] = useState(false)
+
+  const handleCloseModal = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      setSelectedMember(null)
+      setIsClosing(false)
+    }, 280)
+  }
 
   const teamMembers = [
     {
@@ -76,7 +85,7 @@ export default function Team({ onOpenModal }) {
 
 
   return (
-    <div className="team-page py-4">
+    <div className="team-page py-1">
       <div className="container">
 
         {/* Header */}
@@ -89,7 +98,7 @@ export default function Team({ onOpenModal }) {
         </div>
 
         {/* Team Grid: Display All 6 Team Members */}
-        <div className="row g-4 mb-5 justify-content-center">
+        <div className="row g-4 mb-3 justify-content-center">
           {teamMembers.map((m) => (
             <div key={m.id} className="col-12 col-sm-6 col-lg-4">
               <Tilt3D maxTilt={10} scale={1.03} perspective={900} className="h-100">
@@ -152,20 +161,20 @@ export default function Team({ onOpenModal }) {
         {/* Details Modal on Picture Click */}
         {selectedMember && (
           <div
-            className="team-modal-backdrop"
-            onClick={() => setSelectedMember(null)}
+            className={`team-modal-backdrop ${isClosing ? 'closing' : ''}`}
+            onClick={handleCloseModal}
             aria-modal="true"
             role="dialog"
           >
             <div
-              className="team-modal-dialog"
+              className={`team-modal-dialog ${isClosing ? 'closing' : ''}`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 type="button"
                 className="team-modal-close-btn"
-                onClick={() => setSelectedMember(null)}
+                onClick={handleCloseModal}
                 aria-label="Close"
               >
                 <i className="bi bi-x-lg"></i>
@@ -236,7 +245,7 @@ export default function Team({ onOpenModal }) {
                     <button
                       type="button"
                       className="btn btn-outline-secondary rounded-pill px-4 fw-semibold"
-                      onClick={() => setSelectedMember(null)}
+                      onClick={handleCloseModal}
                     >
                       Close
                     </button>
@@ -244,7 +253,7 @@ export default function Team({ onOpenModal }) {
                       type="button"
                       className="btn btn-success rounded-pill px-4 fw-bold shadow-sm"
                       onClick={() => {
-                        setSelectedMember(null)
+                        handleCloseModal()
                         if (onOpenModal) onOpenModal()
                       }}
                     >
@@ -258,7 +267,7 @@ export default function Team({ onOpenModal }) {
         )}
 
         {/* Research Collaboration Callout */}
-        <div className="p-5 rounded-4 glass-card text-center mb-4">
+        <div className="p-4 rounded-4 glass-card text-center mb-1">
           <span className="section-tag">ACADEMIC & JUDICIAL COLLABORATION</span>
           <h3 className="fw-bold mt-2 mb-3">Partner With Our Legal Tech Lab</h3>
           <p className="text-muted max-w-600 mx-auto mb-4">

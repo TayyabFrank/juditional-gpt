@@ -480,22 +480,22 @@ export default function Home({ onOpenModal }) {
       </section>
 
       {/* HOW IT WORKS SECTION */}
-      <section id="how-it-works" className="py-5">
+      <section id="how-it-works" className="section-compact">
         <HowItWorks onOpenModal={onOpenModal} />
       </section>
 
       {/* AI TOOLS SECTION */}
-      <section id="ai-tools" className="py-5">
+      <section id="ai-tools" className="section-compact">
         <AiTools onOpenModal={onOpenModal} />
       </section>
 
       {/* TEAM SECTION */}
-      <section id="team" className="py-5">
+      <section id="team" className="section-compact">
         <Team onOpenModal={onOpenModal} />
       </section>
 
       {/* ABOUT SECTION */}
-      <section id="about" className="py-5">
+      <section id="about" className="section-compact">
         <About onOpenModal={onOpenModal} />
       </section>
     </div>
