@@ -118,13 +118,35 @@ export default function ForgotPassword() {
               </div>
 
               <h4 className="fw-bold mb-2" style={{ color: '#064e3b' }}>
-                Check Your Email
+                Check Your Inbox & Spam
               </h4>
-              <p className="text-muted mb-4" style={{ fontSize: '0.94rem', lineHeight: 1.6 }}>
-                We have dispatched password reset instructions to:
+              <p className="text-muted mb-3" style={{ fontSize: '0.94rem', lineHeight: 1.6 }}>
+                If an account exists with password authentication, reset instructions have been sent to:
                 <br />
                 <strong className="text-dark">{email}</strong>
               </p>
+
+              <div
+                className="alert alert-info py-2 px-3 rounded-3 mb-4 text-start"
+                style={{
+                  fontSize: '0.84rem',
+                  backgroundColor: 'rgba(6, 78, 59, 0.08)',
+                  borderColor: 'rgba(16, 185, 129, 0.3)',
+                  color: '#064e3b'
+                }}
+              >
+                <div className="d-flex align-items-start gap-2">
+                  <i className="bi bi-info-circle-fill text-success mt-1 flex-shrink-0"></i>
+                  <div>
+                    <strong>Didn't see the email?</strong>
+                    <ul className="mb-0 ps-3 mt-1" style={{ fontSize: '0.82rem' }}>
+                      <li>Check your <strong>Spam / Junk</strong> or <strong>Promotions</strong> folder.</li>
+                      <li>Look for emails from <code>noreply@judicialgpt.firebaseapp.com</code>.</li>
+                      <li>If you signed up with <strong>Google</strong>, please use <strong>"Continue with Google"</strong> to sign in.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
               <div className="d-flex flex-column gap-2">
                 <Link to="/login" className="btn-auth-submit text-decoration-none">

@@ -190,7 +190,20 @@ export const signInWithGoogle = loginWithGoogle;
  * Send password reset email
  */
 export const resetPassword = async (email) => {
-  await sendPasswordResetEmail(auth, email.trim());
+  const cleanEmail = email.trim();
+  const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:5174";
+  
+  const actionCodeSettings = {
+    url: `${origin}/login`,
+    handleCodeInApp: false
+  };
+
+  try {
+    await sendPasswordResetEmail(auth, cleanEmail, actionCodeSettings);
+  } catch (err) {
+    // If custom action URL fails or is rejected, retry with standard Firebase handler
+    await sendPasswordResetEmail(auth, cleanEmail);
+  }
   return true;
 };
 

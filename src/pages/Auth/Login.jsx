@@ -233,7 +233,6 @@ export default function Login() {
 
               <Link
                 to="/forgot-password"
-                state={{ email }}
                 className="auth-link"
               >
                 Forgot password?
