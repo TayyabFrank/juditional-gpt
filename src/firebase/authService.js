@@ -12,6 +12,10 @@ import {
   doc,
   setDoc,
   getDoc,
+  getDocs,
+  collection,
+  query,
+  where,
   updateDoc,
   serverTimestamp
 } from "firebase/firestore";
@@ -35,10 +39,11 @@ export const getFriendlyAuthErrorMessage = (error) => {
     case "auth/user-disabled":
       return "This user account has been disabled.";
     case "auth/user-not-found":
-      return "No account found with this email address.";
+      return "No account found with this email. Please sign up first before logging in.";
     case "auth/wrong-password":
+      return "Incorrect password. Please verify your password or reset it.";
     case "auth/invalid-credential":
-      return "Invalid email or password. Please verify your credentials.";
+      return "Invalid email or password. If you don't have an account, please sign up first.";
     case "auth/email-already-in-use":
       return "An account with this email address already exists. Please sign in.";
     case "auth/weak-password":
@@ -59,12 +64,35 @@ export const getFriendlyAuthErrorMessage = (error) => {
 };
 
 /**
+ * Checks whether an email address exists in the Firestore users collection
+ */
+export const checkEmailRegistered = async (email) => {
+  if (!email || !db) return null;
+  try {
+    const clean = email.trim().toLowerCase();
+    const q1 = query(collection(db, "users"), where("email", "==", clean));
+    const snap1 = await getDocs(q1);
+    if (!snap1.empty) return true;
+
+    const q2 = query(collection(db, "users"), where("email", "==", email.trim()));
+    const snap2 = await getDocs(q2);
+    if (!snap2.empty) return true;
+
+    return false;
+  } catch (err) {
+    console.warn("[JudicialGPT Auth] checkEmailRegistered warning:", err);
+    return null;
+  }
+};
+
+/**
  * Register user with Email, Password and create Firestore profile in users/{uid}
  */
 export const registerUser = async ({ email, password, firstName, lastName, mobile, role = "Legal Professional" }) => {
   const fullName = `${firstName?.trim() || ""} ${lastName?.trim() || ""}`.trim() || "Advocate User";
+  const cleanEmail = email.trim();
 
-  const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+  const userCredential = await createUserWithEmailAndPassword(auth, cleanEmail, password);
   const firebaseUser = userCredential.user;
 
   // Update Auth Profile Display Name
@@ -82,7 +110,7 @@ export const registerUser = async ({ email, password, firstName, lastName, mobil
     name: fullName,
     firstName: firstName?.trim() || "",
     lastName: lastName?.trim() || "",
-    email: email.trim(),
+    email: cleanEmail.toLowerCase(),
     mobile: mobile ? mobile.trim() : "",
     role: role || "Legal Professional",
     photoURL: firebaseUser.photoURL || null,
@@ -108,38 +136,55 @@ export const registerUser = async ({ email, password, firstName, lastName, mobil
  * Sign in user with email & password and retrieve Firestore profile
  */
 export const loginUser = async (email, password) => {
-  const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password);
-  const firebaseUser = userCredential.user;
+  const cleanEmail = email.trim();
 
   try {
-    const userDocRef = doc(db, "users", firebaseUser.uid);
-    const userSnap = await getDoc(userDocRef);
+    const userCredential = await signInWithEmailAndPassword(auth, cleanEmail, password);
+    const firebaseUser = userCredential.user;
 
-    if (userSnap.exists()) {
-      return userSnap.data();
+    try {
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        return userSnap.data();
+      }
+    } catch (err) {
+      console.warn("Firestore getDoc error:", err);
     }
-  } catch (err) {
-    console.warn("Firestore getDoc error:", err);
+
+    const fallbackProfile = {
+      uid: firebaseUser.uid,
+      name: firebaseUser.displayName || cleanEmail.split("@")[0],
+      email: firebaseUser.email || cleanEmail,
+      role: "Legal Professional",
+      photoURL: firebaseUser.photoURL || null,
+      authProvider: "email",
+      updatedAt: new Date().toISOString()
+    };
+
+    try {
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+      await setDoc(userDocRef, fallbackProfile, { merge: true });
+    } catch (err) {
+      console.warn("Firestore setDoc fallback error:", err);
+    }
+
+    return fallbackProfile;
+  } catch (authError) {
+    // Check if account doesn't exist
+    if (authError.code === "auth/user-not-found") {
+      throw new Error("No account found with this email. Please sign up first before logging in.");
+    }
+    if (authError.code === "auth/invalid-credential" || authError.code === "auth/wrong-password") {
+      const isRegistered = await checkEmailRegistered(cleanEmail);
+      if (isRegistered === false) {
+        throw new Error("No account found with this email. Please sign up first before logging in.");
+      }
+      throw new Error("Incorrect password. Please verify your password or use 'Forgot password' to reset it.");
+    }
+    throw new Error(getFriendlyAuthErrorMessage(authError));
   }
-
-  const fallbackProfile = {
-    uid: firebaseUser.uid,
-    name: firebaseUser.displayName || email.split("@")[0],
-    email: firebaseUser.email,
-    role: "Legal Professional",
-    photoURL: firebaseUser.photoURL || null,
-    authProvider: "email",
-    updatedAt: new Date().toISOString()
-  };
-
-  try {
-    const userDocRef = doc(db, "users", firebaseUser.uid);
-    await setDoc(userDocRef, fallbackProfile, { merge: true });
-  } catch (err) {
-    console.warn("Firestore setDoc fallback error:", err);
-  }
-
-  return fallbackProfile;
 };
 
 /**
@@ -152,7 +197,7 @@ export const loginWithGoogle = async () => {
   let profile = {
     uid: user.uid,
     name: user.displayName || "Advocate User",
-    email: user.email,
+    email: user.email ? user.email.toLowerCase() : "",
     role: "Advocate High Court",
     photoURL: user.photoURL || null,
     mobile: user.phoneNumber || "",
@@ -187,12 +232,18 @@ export const loginWithGoogle = async () => {
 export const signInWithGoogle = loginWithGoogle;
 
 /**
- * Send password reset email
+ * Send password reset email with prior registration verification
  */
 export const resetPassword = async (email) => {
   const cleanEmail = email.trim();
+
+  // Verify whether email exists in Firestore registration database
+  const isRegistered = await checkEmailRegistered(cleanEmail);
+  if (isRegistered === false) {
+    throw new Error("This email is not registered with JudicialGPT. Please sign up first to create an account.");
+  }
+
   const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:5174";
-  
   const actionCodeSettings = {
     url: `${origin}/login`,
     handleCodeInApp: false
@@ -201,7 +252,9 @@ export const resetPassword = async (email) => {
   try {
     await sendPasswordResetEmail(auth, cleanEmail, actionCodeSettings);
   } catch (err) {
-    // If custom action URL fails or is rejected, retry with standard Firebase handler
+    if (err.code === "auth/user-not-found") {
+      throw new Error("This email is not registered with JudicialGPT. Please sign up first to create an account.");
+    }
     await sendPasswordResetEmail(auth, cleanEmail);
   }
   return true;

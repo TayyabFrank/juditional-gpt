@@ -170,9 +170,26 @@ export default function Login() {
           </div>
 
           {errorMessage && (
-            <div className="alert alert-danger py-2 px-3 rounded-3 mb-3 d-flex align-items-center gap-2" style={{ fontSize: '0.86rem' }}>
-              <i className="bi bi-exclamation-triangle-fill"></i>
-              <span>{errorMessage}</span>
+            <div
+              className="alert alert-danger py-2 px-3 rounded-3 mb-3 d-flex flex-column gap-2"
+              style={{ fontSize: '0.86rem' }}
+            >
+              <div className="d-flex align-items-center gap-2">
+                <i className="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                <span>{errorMessage}</span>
+              </div>
+              {errorMessage.toLowerCase().includes('sign up') && (
+                <div className="mt-1 pt-1 border-top border-danger border-opacity-25 d-flex align-items-center justify-content-between">
+                  <span className="text-muted" style={{ fontSize: '0.8rem' }}>Don't have an account yet?</span>
+                  <Link
+                    to="/signup"
+                    className="btn btn-sm btn-danger py-1 px-2 rounded-2 fw-semibold text-decoration-none"
+                    style={{ fontSize: '0.78rem' }}
+                  >
+                    Sign Up Now <i className="bi bi-arrow-right"></i>
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 
