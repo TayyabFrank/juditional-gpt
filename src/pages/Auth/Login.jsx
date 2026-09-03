@@ -231,16 +231,12 @@ export default function Login() {
                 <span>Remember me for 30 days</span>
               </label>
 
-              <a
-                href="#forgot-password"
+              <Link
+                to="/forgot-password"
                 className="auth-link"
-                onClick={(e) => {
-                  e.preventDefault()
-                  alert('Password reset instructions have been dispatched to your chamber registered email.')
-                }}
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <button

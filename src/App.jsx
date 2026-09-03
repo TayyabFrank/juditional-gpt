@@ -16,6 +16,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home/Home'
 import Login from './pages/Auth/Login'
 import Signup from './pages/Auth/Signup'
+import ForgotPassword from './pages/Auth/ForgotPassword'
 import Assistant from './pages/Assistant/Assistant'
 
 // Helper component to scroll to top on route change
@@ -66,6 +67,7 @@ function MainAppLayout() {
           <Route path="/" element={<Home onOpenModal={handleOpenAssistant} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
