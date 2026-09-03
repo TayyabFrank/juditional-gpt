@@ -196,32 +196,207 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Buttons & Micro-interactions
+   Buttons & Micro-interactions (Eye-Catching & Mobile Optimized)
    -------------------------------------------------------------------------- */
 .btn-emerald {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  position: relative;
+  background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
   color: #ffffff !important;
-  font-weight: 600;
-  border: none;
+  font-weight: 700;
+  font-size: 0.96rem;
+  letter-spacing: -0.2px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-pill);
-  padding: 0.65rem 1.6rem;
+  padding: 0.72rem 1.75rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  justify-content: center;
+  gap: 0.65rem;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35), 0 0 0 1px rgba(16, 185, 129, 0.25);
   text-decoration: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 46px;
+}
+
+/* Radiant Sheen Sweep on hover/active */
+.btn-emerald::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
 }
 
 .btn-emerald:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.38);
-  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  transform: translateY(-2.5px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(5, 150, 105, 0.48), 0 0 20px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, #047857 0%, #065f46 60%, #024a35 100%);
+  color: #ffffff !important;
+}
+
+.btn-emerald:hover::before {
+  left: 150%;
 }
 
 .btn-emerald:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 3px 12px rgba(5, 150, 105, 0.35);
+}
+
+.btn-emerald i {
+  font-size: 1.1rem;
+  transition: transform 0.25s ease;
+}
+
+.btn-emerald:hover i {
+  transform: scale(1.15);
+}
+
+/* Secondary Frosted Emerald Button */
+.btn-secondary-emerald {
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #047857 !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  border-radius: var(--radius-pill);
+  padding: 0.68rem 1.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(5, 60, 42, 0.06);
+  text-decoration: none;
+  min-height: 46px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-secondary-emerald:hover {
+  background: rgba(236, 253, 245, 0.95);
+  border-color: #059669;
+  color: #065f46 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.22);
+}
+
+.btn-secondary-emerald:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Mobile Nav Drawer Custom Buttons */
+.btn-nav-mobile-signin {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(16, 185, 129, 0.35);
+  color: #064e3b;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-nav-mobile-signin:hover, .btn-nav-mobile-signin:active {
+  background: #f0fdf7;
+  border-color: #059669;
+  color: #047857;
+  transform: scale(0.98);
+}
+
+.btn-nav-mobile-cta {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  border: none;
+  padding: 0.65rem 1.15rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.32);
+  transition: all 0.2s ease;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-nav-mobile-cta:hover, .btn-nav-mobile-cta:active {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.45);
+  color: #ffffff;
+  transform: scale(0.98);
+}
+
+.btn-nav-mobile-assistant {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.2) 100%);
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  color: #047857;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-mobile-assistant:hover, .btn-nav-mobile-assistant:active {
+  background: rgba(16, 185, 129, 0.25);
+  transform: scale(0.98);
+}
+
+.btn-nav-mobile-signout {
+  background: #fef2f2;
+  border: 1.5px solid rgba(239, 68, 68, 0.25);
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1rem;
+  border-radius: 12px;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 42px;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-mobile-signout:hover, .btn-nav-mobile-signout:active {
+  background: #fee2e2;
+  border-color: #ef4444;
+  transform: scale(0.98);
 }
 
 /* --------------------------------------------------------------------------

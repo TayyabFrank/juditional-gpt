@@ -106,29 +106,30 @@ export default function Navbar({ onOpenModal }) {
             <div className="d-lg-none mt-3 pt-3 border-top d-flex flex-column gap-2">
               {isAuthenticated ? (
                 <div className="d-flex flex-column gap-2">
-                  <div className="d-flex align-items-center gap-2 p-2 rounded-3 bg-light">
-                    <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px', fontSize: '0.85rem' }}>
+                  <div className="d-flex align-items-center gap-2 p-2 rounded-3 bg-light border">
+                    <div className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold" style={{ width: '36px', height: '36px', fontSize: '0.9rem', background: 'linear-gradient(135deg, #059669, #10b981)' }}>
                       {currentUser?.name?.charAt(0) || 'U'}
                     </div>
                     <div>
-                      <div className="fw-bold text-dark" style={{ fontSize: '0.88rem' }}>{currentUser?.name}</div>
-                      <small className="text-muted">{currentUser?.role}</small>
+                      <div className="fw-bold text-dark" style={{ fontSize: '0.9rem' }}>{currentUser?.name}</div>
+                      <small className="text-muted" style={{ fontSize: '0.75rem' }}>{currentUser?.role}</small>
                     </div>
                   </div>
-                  <button className="btn btn-outline-success btn-sm w-100" onClick={onOpenModal}>
-                    <i className="bi bi-robot me-1"></i> Open Assistant
+                  <button className="btn-nav-mobile-assistant" onClick={onOpenModal}>
+                    <i className="bi bi-robot"></i> Open AI Assistant
                   </button>
-                  <button className="btn btn-outline-danger btn-sm w-100" onClick={logout}>
-                    <i className="bi bi-box-arrow-right me-1"></i> Sign Out
+                  <button className="btn-nav-mobile-signout" onClick={logout}>
+                    <i className="bi bi-box-arrow-right"></i> Sign Out
                   </button>
                 </div>
               ) : (
                 <div className="d-flex gap-2">
-                  <button className="btn btn-outline-secondary btn-sm flex-fill" onClick={() => navigate('/login')}>
+                  <button className="btn-nav-mobile-signin flex-fill" onClick={() => navigate('/login')}>
                     Sign In
                   </button>
-                  <button className="btn btn-success btn-sm flex-fill" onClick={() => navigate('/signup')}>
-                    Get Started Free
+                  <button className="btn-nav-mobile-cta flex-fill" onClick={() => navigate('/signup')}>
+                    <span>Get Started</span>
+                    <i className="bi bi-arrow-right"></i>
                   </button>
                 </div>
               )}

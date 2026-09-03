@@ -139,13 +139,14 @@ export default function Features({ onOpenModal }) {
           <p className="text-muted max-w-600 mx-auto mb-4">
             Try our interactive assistant now or explore how JudicialGPT seamlessly searches statutes, precedents, and court records.
           </p>
-          <div className="d-flex justify-content-center gap-3">
+          <div className="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
             <button className="btn-emerald" onClick={handleTryFree}>
               <i className="bi bi-robot"></i>
               <span>Try AI Assistant Free</span>
             </button>
-            <a href="#ai-tools" className="btn btn-outline-success rounded-pill px-4 fw-bold">
-              Explore AI Tools
+            <a href="#ai-tools" className="btn-secondary-emerald">
+              <i className="bi bi-stars"></i>
+              <span>Explore AI Tools</span>
             </a>
           </div>
         </div>

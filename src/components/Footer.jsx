@@ -57,16 +57,18 @@ export default function Footer() {
 
         <div className="footer-divider-line"></div>
 
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
-          <p className="mb-0 text-muted" style={{ fontSize: '0.85rem' }}>
+        <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 text-center text-md-start">
+          <p className="mb-0 text-muted footer-copy-text" style={{ fontSize: '0.86rem' }}>
             &copy; {new Date().getFullYear()} JudicialGPT Intelligence Platform. All rights reserved.
           </p>
-          <div className="d-flex align-items-center gap-3">
-            <span className="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
-              🛡️ 256-Bit TLS Bank-Grade Encryption
+          <div className="footer-badges-container d-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2">
+            <span className="footer-badge-pill footer-badge-security">
+              <span className="footer-badge-icon">🛡️</span>
+              <span className="footer-badge-label">256-Bit TLS Bank-Grade Encryption</span>
             </span>
-            <span className="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill">
-              🇵🇰 Pakistani Common Law Jurisprudence
+            <span className="footer-badge-pill footer-badge-jurisprudence">
+              <span className="footer-badge-icon">🇵🇰</span>
+              <span className="footer-badge-label">Pakistani Common Law Jurisprudence</span>
             </span>
           </div>
         </div>

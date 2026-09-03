@@ -92,11 +92,13 @@ export default function AssistantModal({ isOpen, onClose }) {
                 }}
               />
               <button 
-                className="btn btn-success px-4 rounded-end-pill fw-bold" 
+                className="btn-emerald rounded-end-pill px-4" 
                 type="button" 
                 onClick={handleSend}
+                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               >
-                <i className="bi bi-send-fill me-1"></i> Ask AI
+                <i className="bi bi-send-fill"></i>
+                <span>Ask AI</span>
               </button>
             </div>
           </div>
