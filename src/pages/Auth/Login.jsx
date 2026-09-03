@@ -46,7 +46,7 @@ export default function Login() {
       await loginWithGoogle()
       navigate(from, { replace: true })
     } catch (err) {
-      setErrorMessage('Google authentication could not be completed. Please try again.')
+      setErrorMessage(err.message || 'Google authentication could not be completed. Please try again.')
     } finally {
       setIsGoogleLoading(false)
     }

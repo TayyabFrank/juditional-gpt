@@ -1,4 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import {
+  registerUser,
+  loginUser,
+  signInWithGoogle,
+  logoutUser,
+  resetPassword,
+  subscribeToAuthChanges,
+  getFriendlyAuthErrorMessage,
+  isFirebaseConfigured
+} from '../firebase'
 
 const AuthContext = createContext(null)
 
@@ -12,6 +22,7 @@ export function AuthProvider({ children }) {
     }
   })
 
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true)
   const [authNotification, setAuthNotification] = useState(null)
 
   const showNotification = (message, type = 'success') => {
@@ -21,87 +32,119 @@ export function AuthProvider({ children }) {
     }, 4000)
   }
 
-  const loginWithGoogle = async () => {
-    // Simulated Google OAuth Flow
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const googleUser = {
-          name: 'Advocate Tayyab',
-          email: 'tayyab.advocate@gmail.com',
-          role: 'Advocate High Court',
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-          authProvider: 'google',
-          joinedAt: new Date().toISOString()
-        }
-        setCurrentUser(googleUser)
-        localStorage.setItem('judicialgpt_user', JSON.stringify(googleUser))
-        showNotification('Welcome back! Signed in with Google successfully.', 'success')
-        resolve(googleUser)
-      }, 700)
+  // Real-time listener for Firebase Auth state changes
+  useEffect(() => {
+    const unsubscribe = subscribeToAuthChanges((userProfile) => {
+      if (userProfile) {
+        setCurrentUser(userProfile)
+        localStorage.setItem('judicialgpt_user', JSON.stringify(userProfile))
+      } else if (isFirebaseConfigured) {
+        // If Firebase is active and user signed out
+        setCurrentUser(null)
+        localStorage.removeItem('judicialgpt_user')
+      }
+      setIsLoadingAuth(false)
     })
+
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [])
+
+  const loginWithGoogle = async () => {
+    try {
+      const user = await signInWithGoogle()
+      setCurrentUser(user)
+      localStorage.setItem('judicialgpt_user', JSON.stringify(user))
+      showNotification('Welcome back! Signed in with Google successfully.', 'success')
+      return user
+    } catch (err) {
+      const friendlyMsg = getFriendlyAuthErrorMessage(err)
+      showNotification(friendlyMsg, 'danger')
+      throw new Error(friendlyMsg)
+    }
   }
 
   const login = async (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!email || !password) {
-          showNotification('Please fill in both email and password.', 'danger')
-          reject(new Error('Missing credentials'))
-          return
-        }
-        const user = {
-          name: email.split('@')[0].replace(/[^a-zA-Z]/g, ' ') || 'Advocate User',
-          email,
-          role: 'Legal Professional',
-          avatar: null,
-          authProvider: 'email',
-          joinedAt: new Date().toISOString()
-        }
-        setCurrentUser(user)
-        localStorage.setItem('judicialgpt_user', JSON.stringify(user))
-        showNotification(`Welcome back, ${user.name}!`, 'success')
-        resolve(user)
-      }, 600)
-    })
+    try {
+      if (!email || !password) {
+        showNotification('Please fill in both email and password.', 'danger')
+        throw new Error('Please fill in both email and password.')
+      }
+      const user = await loginUser(email, password)
+      setCurrentUser(user)
+      localStorage.setItem('judicialgpt_user', JSON.stringify(user))
+      showNotification(`Welcome back, ${user.name || 'Advocate'}!`, 'success')
+      return user
+    } catch (err) {
+      const friendlyMsg = getFriendlyAuthErrorMessage(err)
+      showNotification(friendlyMsg, 'danger')
+      throw new Error(friendlyMsg)
+    }
   }
 
-  const signup = async ({ name, email, mobile, password }) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!email || !password || !name) {
-          showNotification('Please complete all required fields.', 'danger')
-          reject(new Error('Missing fields'))
-          return
-        }
-        const newUser = {
-          name: name.trim(),
-          email: email.trim(),
-          mobile: mobile ? mobile.trim() : '',
-          role: 'Legal Professional',
-          avatar: null,
-          authProvider: 'email',
-          joinedAt: new Date().toISOString()
-        }
-        setCurrentUser(newUser)
-        localStorage.setItem('judicialgpt_user', JSON.stringify(newUser))
-        showNotification(`Welcome to JudicialGPT, ${newUser.name}!`, 'success')
-        resolve(newUser)
-      }, 600)
-    })
+  const signup = async ({ firstName, lastName, name, email, mobile, password, role }) => {
+    try {
+      if (!email || !password) {
+        showNotification('Please complete all required fields.', 'danger')
+        throw new Error('Missing fields')
+      }
+      const fName = firstName || (name ? name.split(' ')[0] : 'Advocate')
+      const lName = lastName || (name ? name.split(' ').slice(1).join(' ') : 'User')
+
+      const newUser = await registerUser({
+        email,
+        password,
+        firstName: fName,
+        lastName: lName,
+        mobile,
+        role: role || 'Legal Professional'
+      })
+      setCurrentUser(newUser)
+      localStorage.setItem('judicialgpt_user', JSON.stringify(newUser))
+      showNotification(`Welcome to JudicialGPT, ${newUser.name}!`, 'success')
+      return newUser
+    } catch (err) {
+      const friendlyMsg = getFriendlyAuthErrorMessage(err)
+      showNotification(friendlyMsg, 'danger')
+      throw new Error(friendlyMsg)
+    }
   }
 
-  const logout = () => {
-    setCurrentUser(null)
-    localStorage.removeItem('judicialgpt_user')
-    showNotification('You have been signed out.', 'info')
+  const handleResetPassword = async (email) => {
+    try {
+      if (!email) throw new Error('Please provide your email address.')
+      await resetPassword(email)
+      showNotification('Password reset instructions sent to your email.', 'success')
+      return true
+    } catch (err) {
+      const friendlyMsg = getFriendlyAuthErrorMessage(err)
+      showNotification(friendlyMsg, 'danger')
+      throw new Error(friendlyMsg)
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await logoutUser()
+    } catch (err) {
+      console.warn('[JudicialGPT Auth] Logout error:', err)
+    } finally {
+      setCurrentUser(null)
+      localStorage.removeItem('judicialgpt_user')
+      showNotification('You have been signed out.', 'info')
+    }
   }
 
   const value = {
     currentUser,
     isAuthenticated: !!currentUser,
+    isLoadingAuth,
+    isFirebaseConfigured,
     loginWithGoogle,
     login,
     signup,
+    resetPassword: handleResetPassword,
     logout,
     authNotification,
     setAuthNotification
@@ -143,3 +186,4 @@ export function useAuth() {
   }
   return context
 }
+

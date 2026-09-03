@@ -1,6 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import {
+  createChatSession,
+  subscribeToUserChats,
+  subscribeToChatMessages,
+  addMessageToChat,
+  deleteChatSession
+} from '../../firebase'
 import './Assistant.css'
 
 export default function Assistant() {
@@ -15,7 +22,9 @@ export default function Assistant() {
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false)
   const [selectedModel, setSelectedModel] = useState('JudicialGPT')
 
-  // Chat message state
+  // Chat message & session state
+  const [activeChatId, setActiveChatId] = useState(null)
+  const [chatSessions, setChatSessions] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [messages, setMessages] = useState([])
   const [isAiTyping, setIsAiTyping] = useState(false)
@@ -37,17 +46,63 @@ export default function Assistant() {
     scrollToBottom()
   }, [messages, isAiTyping])
 
-  const handleSendMessage = (textToSend) => {
+  // Real-time subscription to user chat sessions list
+  useEffect(() => {
+    if (!currentUser?.uid) return
+    const unsubscribe = subscribeToUserChats(currentUser.uid, (chats) => {
+      setChatSessions(chats)
+    })
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [currentUser?.uid])
+
+  // Real-time subscription to messages of the active chat
+  useEffect(() => {
+    if (!currentUser?.uid || !activeChatId) return
+    const unsubscribe = subscribeToChatMessages(currentUser.uid, activeChatId, (msgs) => {
+      if (msgs && msgs.length > 0) {
+        setMessages(msgs)
+      }
+    })
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [currentUser?.uid, activeChatId])
+
+  const handleSendMessage = async (textToSend) => {
     const text = (textToSend || inputValue).trim()
     if (!text) return
 
-    const userMsg = { sender: 'user', text }
+    let currentSessionId = activeChatId
+    const userId = currentUser?.uid
+
+    // If no active session exists yet, create one
+    if (!currentSessionId && userId) {
+      try {
+        const titleSnippet = text.length > 30 ? text.substring(0, 30) + '...' : text
+        const newSession = await createChatSession(userId, titleSnippet)
+        currentSessionId = newSession.id
+        setActiveChatId(newSession.id)
+      } catch (err) {
+        console.warn('[Assistant] Error creating chat session:', err)
+      }
+    }
+
+    const userMsg = { sender: 'user', text, model: selectedModel }
     setMessages((prev) => [...prev, userMsg])
     setInputValue('')
     setIsAiTyping(true)
 
+    // Persist user message to Firestore if authenticated
+    if (userId && currentSessionId) {
+      addMessageToChat(userId, currentSessionId, userMsg).catch((e) =>
+        console.error('Error saving user msg:', e)
+      )
+    }
+
     // Synthesize realistic Pakistani legal response
-    setTimeout(() => {
+    setTimeout(async () => {
       let aiResponseText = ''
       let citations = []
 
@@ -65,15 +120,22 @@ export default function Assistant() {
         citations = ['PLD 2023 SC 102', '2022 SCMR 1150', 'Civil Procedure Code 1908']
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: 'ai',
-          text: aiResponseText,
-          citations
-        }
-      ])
+      const aiMsg = {
+        sender: 'ai',
+        text: aiResponseText,
+        citations,
+        model: selectedModel
+      }
+
+      setMessages((prev) => [...prev, aiMsg])
       setIsAiTyping(false)
+
+      // Persist AI response to Firestore
+      if (userId && currentSessionId) {
+        addMessageToChat(userId, currentSessionId, aiMsg).catch((e) =>
+          console.error('Error saving AI msg:', e)
+        )
+      }
     }, 850)
   }
 
@@ -85,9 +147,24 @@ export default function Assistant() {
   }
 
   const startNewChat = () => {
+    setActiveChatId(null)
     setMessages([])
     setInputValue('')
   }
+
+  const handleDeleteChat = async (e, chatId) => {
+    e.stopPropagation()
+    if (!currentUser?.uid || !chatId) return
+    try {
+      await deleteChatSession(currentUser.uid, chatId)
+      if (activeChatId === chatId) {
+        startNewChat()
+      }
+    } catch (err) {
+      console.error('Error deleting chat session:', err)
+    }
+  }
+
 
   return (
     <div className="assistant-workspace">
@@ -216,14 +293,37 @@ export default function Assistant() {
 
         {/* Middle: Conversation History / No conversations */}
         <div className="sidebar-conversations">
-          {messages.length === 0 ? (
+          {chatSessions.length > 0 ? (
+            chatSessions.map((session) => (
+              <div
+                key={session.id}
+                className={`history-item d-flex align-items-center justify-content-between ${
+                  activeChatId === session.id ? 'active' : ''
+                }`}
+                onClick={() => setActiveChatId(session.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="d-flex align-items-center gap-2 text-truncate">
+                  <i className="bi bi-chat-left-text text-success flex-shrink-0"></i>
+                  <span className="text-truncate" style={{ fontSize: '0.84rem' }}>
+                    {session.title || 'Legal Inquiry'}
+                  </span>
+                </div>
+                <button
+                  className="btn btn-link p-0 text-muted hover-text-danger border-0 flex-shrink-0 ms-1 opacity-50 hover-opacity-100"
+                  onClick={(e) => handleDeleteChat(e, session.id)}
+                  title="Delete Chat"
+                  style={{ background: 'transparent' }}
+                >
+                  <i className="bi bi-trash3" style={{ fontSize: '0.78rem' }}></i>
+                </button>
+              </div>
+            ))
+          ) : messages.length === 0 ? (
             <div className="conversations-empty">No conversations</div>
           ) : (
-            <div
-              className="history-item active"
-              onClick={() => {}}
-            >
-              <i className="bi bi-chat-left-text"></i>
+            <div className="history-item active" onClick={() => {}}>
+              <i className="bi bi-chat-left-text text-success"></i>
               <span>{messages[0]?.text?.substring(0, 22)}...</span>
             </div>
           )}
