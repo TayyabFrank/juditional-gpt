@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import './Auth.css'
 
 export default function ForgotPassword() {
-  const location = useLocation()
   const { resetPassword } = useAuth()
-  const [email, setEmail] = useState(location.state?.email || '')
+  const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -15,16 +14,14 @@ export default function ForgotPassword() {
     e.preventDefault()
     setErrorMessage('')
 
-    const cleanEmail = email.trim()
-    if (!cleanEmail) {
+    if (!email.trim()) {
       setErrorMessage('Please enter your registered email address.')
       return
     }
 
     try {
       setIsLoading(true)
-      // Dispatches password reset link to user's email via Firebase Auth
-      await resetPassword(cleanEmail)
+      await resetPassword(email.trim())
       setIsSuccess(true)
     } catch (err) {
       setErrorMessage(err.message || 'Failed to send password reset email. Please verify your address.')
@@ -109,13 +106,12 @@ export default function ForgotPassword() {
           {isSuccess ? (
             <div className="py-4 text-center">
               <div
-                className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow-sm"
+                className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
                 style={{
-                  width: '68px',
-                  height: '68px',
+                  width: '64px',
+                  height: '64px',
                   background: 'rgba(16, 185, 129, 0.15)',
-                  color: '#10b981',
-                  border: '1px solid rgba(16, 185, 129, 0.3)'
+                  color: '#10b981'
                 }}
               >
                 <i className="bi bi-check-circle-fill fs-2"></i>
@@ -127,9 +123,7 @@ export default function ForgotPassword() {
               <p className="text-muted mb-4" style={{ fontSize: '0.94rem', lineHeight: 1.6 }}>
                 We have dispatched password reset instructions to:
                 <br />
-                <strong className="text-dark fs-6 mt-1 d-inline-block p-2 rounded-3 bg-light border border-success border-opacity-25">
-                  {email}
-                </strong>
+                <strong className="text-dark">{email}</strong>
               </p>
 
               <div className="d-flex flex-column gap-2">
@@ -168,7 +162,7 @@ export default function ForgotPassword() {
                     id="reset-email"
                     type="email"
                     className="auth-input-field"
-                    placeholder="advocate@chamber.pk"
+                    placeholder="e.g. advocate@chamber.pk"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
