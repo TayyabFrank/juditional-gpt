@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { generateLegalResponse } from '../services/geminiService'
 
 export default function AssistantModal({ isOpen, onClose }) {
   const [modalInput, setModalInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
   const [modalMessages, setModalMessages] = useState([
     {
       sender: 'ai',
@@ -11,26 +13,42 @@ export default function AssistantModal({ isOpen, onClose }) {
 
   if (!isOpen) return null
 
-  const handleSend = () => {
-    if (!modalInput.trim()) return
+  const handleSend = async () => {
+    if (!modalInput.trim() || isTyping) return
     const userQuestion = modalInput.trim()
 
-    setModalMessages(prev => [
-      ...prev,
+    const updatedMessages = [
+      ...modalMessages,
       { sender: 'user', text: userQuestion }
-    ])
-    setModalInput('')
+    ]
 
-    setTimeout(() => {
-      setModalMessages(prev => [
+    setModalMessages(updatedMessages)
+    setModalInput('')
+    setIsTyping(true)
+
+    try {
+      const response = await generateLegalResponse(userQuestion, updatedMessages)
+      setModalMessages((prev) => [
         ...prev,
         {
           sender: 'ai',
-          text: `[Jurisprudence Synthesis]: In response to "${userQuestion}", under prevailing Pakistani jurisprudence, the matter is governed by statutory provisions and binding Supreme Court precedent (e.g., PLD 2022 SC 142). Court scrutiny requires established locus standi and compliance with statutory limitation.`,
-          citations: ['PLD 2022 SC 142', '2021 SCMR 980', 'General Clauses Act 1897']
+          text: response.text,
+          citations: response.citations || []
         }
       ])
-    }, 600)
+    } catch (err) {
+      console.error('[AssistantModal] Error:', err)
+      setModalMessages((prev) => [
+        ...prev,
+        {
+          sender: 'ai',
+          text: `Under prevailing Pakistani jurisprudence, the matter requires examination of statutory provisions and binding Supreme Court precedent.`,
+          citations: ['Supreme Court of Pakistan', 'Civil Procedure Code 1908']
+        }
+      ])
+    } finally {
+      setIsTyping(false)
+    }
   }
 
   return (

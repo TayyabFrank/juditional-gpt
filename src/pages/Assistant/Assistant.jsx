@@ -8,6 +8,7 @@ import {
   addMessageToChat,
   deleteChatSession
 } from '../../firebase'
+import { generateLegalResponse } from '../../services/geminiService'
 import './Assistant.css'
 
 export default function Assistant() {
@@ -101,29 +102,13 @@ export default function Assistant() {
       )
     }
 
-    // Synthesize realistic Pakistani legal response
-    setTimeout(async () => {
-      let aiResponseText = ''
-      let citations = []
-
-      if (text.toLowerCase().includes('contract') || text.toLowerCase().includes('breach')) {
-        aiResponseText = `Under Pakistani law, breach of contract is governed primarily by the Contract Act, 1872. Section 73 provides for compensatory damages arising naturally in the usual course of things. Furthermore, under the Specific Relief Act, 1877 (Sections 12 and 19), courts grant decrees of specific performance where pecuniary compensation cannot afford adequate relief, particularly in transactions concerning immovable property.`
-        citations = ['PLD 2023 SC 145', '2021 SCMR 980', 'Section 73, Contract Act 1872', 'Specific Relief Act 1877']
-      } else if (text.toLowerCase().includes('bail') || text.toLowerCase().includes('497')) {
-        aiResponseText = `In post-arrest bail petitions under Section 497 Cr.P.C., the Supreme Court of Pakistan has consistently held that liberty of a citizen is a precious fundamental right guaranteed under Articles 4 and 9 of the Constitution. Where reasonable grounds do not appear for believing the accused guilty of an offence punishable with death or imprisonment for life, bail is granted as a matter of rule and refusal is an exception.`
-        citations = ['PLD 2022 SC 142', '2020 SCMR 249', 'Section 497, Code of Criminal Procedure 1898']
-      } else if (text.toLowerCase().includes('writ') || text.toLowerCase().includes('199')) {
-        aiResponseText = `Judicial review under Article 199 of the Constitution of the Islamic Republic of Pakistan, 1973 lies when no other adequate and alternate remedy is provided by law. The High Court exercises constitutional supervisory jurisdiction against unlawful executive and administrative actions violating statutory duties or fundamental rights.`
-        citations = ['2023 SCMR 512', 'PLD 2016 SC 778', 'Article 199, Constitution of Pakistan 1973']
-      } else {
-        aiResponseText = `Based on binding jurisprudence from the Supreme Court of Pakistan and statutory provisions, your proposition requires established locus standi, adherence to the statutory limitation timeline under the Limitation Act 1908, and authoritative case precedence supporting the cause of action.`
-        citations = ['PLD 2023 SC 102', '2022 SCMR 1150', 'Civil Procedure Code 1908']
-      }
-
+    // Generate AI Judicial Response via Gemini API backend
+    try {
+      const response = await generateLegalResponse(text, messages, selectedModel)
       const aiMsg = {
         sender: 'ai',
-        text: aiResponseText,
-        citations,
+        text: response.text,
+        citations: response.citations || [],
         model: selectedModel
       }
 
@@ -136,7 +121,17 @@ export default function Assistant() {
           console.error('Error saving AI msg:', e)
         )
       }
-    }, 850)
+    } catch (err) {
+      console.error('[Assistant] Error generating AI response:', err)
+      const fallbackMsg = {
+        sender: 'ai',
+        text: 'JudicialGPT encountered an issue generating a response. Please check your network connection or try again.',
+        citations: ['System Notice'],
+        model: selectedModel
+      }
+      setMessages((prev) => [...prev, fallbackMsg])
+      setIsAiTyping(false)
+    }
   }
 
   const handleKeyDown = (e) => {
