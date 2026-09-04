@@ -3,10 +3,8 @@
    ========================================================================== */
 
 .team-card-minimal {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  background: #ffffff;
+  border: 1.5px solid rgba(16, 185, 129, 0.15);
   border-radius: 28px;
   padding: 2.6rem 1.6rem 2.2rem 1.6rem;
   box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
@@ -28,35 +26,11 @@
   will-change: box-shadow, border-color;
 }
 
-/* 3D elevation and emerald glow on hover (Smooth, no transform fighting) */
+/* 3D elevation and emerald glow on hover (Smooth, crystal clear, no blur) */
 .team-card-minimal:hover {
   box-shadow: 0 28px 60px rgba(5, 75, 50, 0.18), 0 0 30px rgba(16, 185, 129, 0.25);
   border-color: rgba(16, 185, 129, 0.6);
-  background: rgba(255, 255, 255, 0.96);
-}
-
-/* Glass-sheen light beam sweep */
-.team-card-minimal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 100%
-  );
-  transform: skewX(-25deg);
-  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.team-card-minimal:hover::before {
-  left: 160%;
+  background: #ffffff;
 }
 
 /* Picture Container with animated multi-layer rings */
@@ -151,10 +125,19 @@
   z-index: 2;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: none !important;
+  -webkit-filter: none !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .team-card-minimal:hover .team-member-pic {
-  transform: scale(1.08);
+  transform: scale(1.06) translateZ(0);
+  filter: none !important;
+  -webkit-filter: none !important;
 }
 
 .team-member-fallback-initials {

@@ -111,7 +111,7 @@ export default function Team({ onOpenModal }) {
         <div className="row g-4 mb-3 justify-content-center">
           {teamMembers.map((m) => (
             <div key={m.id} className="col-12 col-sm-6 col-lg-4">
-              <Tilt3D maxTilt={0} scale={1.04} perspective={900} className="h-100">
+              <Tilt3D maxTilt={0} scale={1.04} perspective={900} glare={false} className="h-100">
                 <div
                   className="team-card-minimal"
                   onClick={() => setSelectedMember(m)}
