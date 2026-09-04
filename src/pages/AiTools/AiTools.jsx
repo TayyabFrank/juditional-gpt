@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import './AiTools.css'
+import Tilt3D from '../../components/Tilt3D'
 
 export default function AiTools({ onOpenModal }) {
   const navigate = useNavigate()
@@ -58,21 +59,21 @@ export default function AiTools({ onOpenModal }) {
       tag: 'Trial Practice'
     },
     {
-      id: 'bail',
+      id: 'criminal-defense',
       category: 'criminal',
-      icon: 'bi-lock',
-      title: 'Bail Grounds Evaluator',
-      desc: 'Evaluates pre-arrest and post-arrest bail petitions under 497/498 CrPC against non-bailable offences, statutory delay, and mala fides jurisprudence.',
-      tag: 'Criminal Defense'
+      icon: 'bi-shield-shaded',
+      title: 'Criminal Charge Evaluator',
+      desc: 'Assesses FIR contents against penal sections (PPC 302, 324, 380, 420) to identify procedural lacunas, police investigation delays, and grounds for quashment.',
+      tag: 'Criminal Law'
     }
   ]
 
   const filteredTools = activeTab === 'all'
     ? tools
-    : tools.filter(t => t.category === activeTab)
+    : tools.filter((t) => t.category === activeTab)
 
   return (
-    <div className="ai-tools-page py-1">
+    <div className="ai-tools-page-view py-1">
       <div className="container">
 
         {/* Header */}
@@ -102,23 +103,25 @@ export default function AiTools({ onOpenModal }) {
         <div className="row g-4 mb-3">
           {filteredTools.map((t) => (
             <div key={t.id} className="col-md-6 col-lg-4">
-              <div className="tool-suite-card">
-                <div className="tool-header-icon">
-                  <i className={`bi ${t.icon}`}></i>
+              <Tilt3D maxTilt={10} scale={1.03} perspective={1100} className="h-100">
+                <div className="tool-suite-card h-100">
+                  <div className="tool-header-icon">
+                    <i className={`bi ${t.icon}`}></i>
+                  </div>
+                  <span className="badge bg-success bg-opacity-10 text-success border border-success-subtle mb-2 w-fit">
+                    {t.tag}
+                  </span>
+                  <h3 className="feature-card-heading">{t.title}</h3>
+                  <p className="feature-card-text">{t.desc}</p>
+                  <button
+                    className="tool-interactive-demo-btn mt-auto"
+                    onClick={handleAction}
+                  >
+                    <span>Launch Tool</span>
+                    <i className="bi bi-arrow-up-right"></i>
+                  </button>
                 </div>
-                <span className="badge bg-success bg-opacity-10 text-success border border-success-subtle mb-2 w-fit">
-                  {t.tag}
-                </span>
-                <h3 className="feature-card-heading">{t.title}</h3>
-                <p className="feature-card-text">{t.desc}</p>
-                <button
-                  className="tool-interactive-demo-btn"
-                  onClick={handleAction}
-                >
-                  <span>Launch Tool</span>
-                  <i className="bi bi-arrow-up-right"></i>
-                </button>
-              </div>
+              </Tilt3D>
             </div>
           ))}
         </div>

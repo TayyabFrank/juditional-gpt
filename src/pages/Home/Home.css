@@ -1004,3 +1004,59 @@
     font-size: 2.15rem;
   }
 }
+
+/* ==========================================================================
+   3D Floating Depth Badges & Parallax Layers
+   ========================================================================== */
+.floating-3d-tag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  border-radius: 18px;
+  padding: 0.65rem 1.15rem;
+  box-shadow: 0 20px 45px -8px rgba(5, 60, 42, 0.22), 0 0 25px rgba(16, 185, 129, 0.2);
+  z-index: 50;
+  pointer-events: none;
+  transform: translateZ(50px);
+  animation: float3d 4s ease-in-out infinite alternate;
+}
+
+.floating-3d-tag.tag-top-right {
+  top: -24px;
+  right: -24px;
+  animation-delay: 0s;
+}
+
+.floating-3d-tag.tag-bottom-left {
+  bottom: -24px;
+  left: -24px;
+  animation-delay: 2s;
+}
+
+.floating-3d-tag .tag-title {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #062e20;
+  line-height: 1.2;
+}
+
+.floating-3d-tag .tag-subtitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #059669;
+  letter-spacing: 0.3px;
+}
+
+@keyframes float3d {
+  0% {
+    transform: translateZ(45px) translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateZ(65px) translateY(-10px) rotate(1.5deg);
+  }
+}

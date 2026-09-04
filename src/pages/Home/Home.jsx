@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import './Home.css'
 import Tilt3D from '../../components/Tilt3D'
+import ThreeCanvas3D from '../../components/ThreeCanvas3D'
 import Features from '../Features/Features'
 import HowItWorks from '../HowItWorks/HowItWorks'
 import AiTools from '../AiTools/AiTools'
@@ -191,7 +192,10 @@ export default function Home({ onOpenModal }) {
     <div className="home-page-view">
       {/* HERO SECTION */}
       <section className="hero-wrapper" id="hero">
-        <div className="hero-container-wide">
+        {/* Interactive WebGL 3D Holographic Scene */}
+        <ThreeCanvas3D />
+
+        <div className="hero-container-wide position-relative" style={{ zIndex: 10 }}>
           <div className="row align-items-center g-4 g-xl-5">
 
             {/* LEFT COLUMN: Hero Title, Subtitle, CTA & Stats Bar */}
@@ -255,7 +259,24 @@ export default function Home({ onOpenModal }) {
 
             {/* RIGHT COLUMN: Interactive 3D Tablet Mockup (Hidden on mobile) */}
             <div className="col-lg-7 col-xl-7 d-none d-lg-block">
-              <Tilt3D maxTilt={5} scale={1.01} perspective={1400} className="w-100">
+              <Tilt3D maxTilt={8} scale={1.02} perspective={1400} className="w-100 position-relative">
+                {/* 3D Floating Depth Badges */}
+                <div className="floating-3d-tag tag-top-right">
+                  <i className="bi bi-shield-check text-success fs-5"></i>
+                  <div>
+                    <div className="tag-title">Zero Hallucination</div>
+                    <div className="tag-subtitle">100% Verified Citations</div>
+                  </div>
+                </div>
+
+                <div className="floating-3d-tag tag-bottom-left">
+                  <i className="bi bi-lightning-charge-fill text-warning fs-5"></i>
+                  <div>
+                    <div className="tag-title">Sub-Second Search</div>
+                    <div className="tag-subtitle">SCMR, PLD, CLC, YLR</div>
+                  </div>
+                </div>
+
                 <div className="mockup-outer-wrapper">
                   <div className="tablet-device-card">
 

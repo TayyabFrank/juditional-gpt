@@ -1284,3 +1284,99 @@
   }
 }
 
+/* ==========================================================================
+   3D Physical Depth & Perspective Transformations
+   ========================================================================== */
+.tilt-3d-wrapper {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+/* 3D Popout Depth Elements on Hover/Tilt */
+.tilt-3d-wrapper .feature-detail-card,
+.tilt-3d-wrapper .tool-suite-card,
+.tilt-3d-wrapper .stats-strip-card,
+.tilt-3d-wrapper .tablet-device-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tilt-3d-wrapper:hover .feature-icon-circle-lg,
+.tilt-3d-wrapper:hover .tool-header-icon {
+  transform: translateZ(38px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.35);
+}
+
+.tilt-3d-wrapper:hover .feature-card-heading,
+.tilt-3d-wrapper:hover .stat-big {
+  transform: translateZ(28px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tilt-3d-wrapper:hover .feature-badge-label,
+.tilt-3d-wrapper:hover .tool-interactive-demo-btn {
+  transform: translateZ(32px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3D Physical Buttons with Tactile Depth */
+.btn-hero-assistant,
+.btn-emerald {
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow: 0 8px 24px -4px rgba(5, 150, 105, 0.4), 0 0 16px rgba(16, 185, 129, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-hero-assistant:hover,
+.btn-emerald:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 32px -4px rgba(5, 150, 105, 0.55), 0 0 24px rgba(16, 185, 129, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.btn-hero-assistant:active,
+.btn-emerald:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+/* Ambient 3D Glass Surface Shimmer */
+.glass-card,
+.stats-strip-card,
+.feature-detail-card,
+.tool-suite-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before,
+.stats-strip-card::before,
+.feature-detail-card::before,
+.tool-suite-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.glass-card:hover::before,
+.stats-strip-card:hover::before,
+.feature-detail-card:hover::before,
+.tool-suite-card:hover::before {
+  left: 150%;
+}
+
+
