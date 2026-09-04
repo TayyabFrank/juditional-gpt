@@ -20,8 +20,7 @@ export default function Assistant() {
   const [isWritingOpen, setIsWritingOpen] = useState(false)
   const [isAgentsOpen, setIsAgentsOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false)
-  const [selectedModel, setSelectedModel] = useState('JudicialGPT')
+  const selectedModel = 'JudicialGPT'
 
   // Chat message & session state
   const [activeChatId, setActiveChatId] = useState(null)
@@ -292,25 +291,22 @@ export default function Assistant() {
             chatSessions.map((session) => (
               <div
                 key={session.id}
-                className={`history-item d-flex align-items-center justify-content-between ${
+                className={`history-item ${
                   activeChatId === session.id ? 'active' : ''
                 }`}
                 onClick={() => setActiveChatId(session.id)}
-                style={{ cursor: 'pointer' }}
               >
-                <div className="d-flex align-items-center gap-2 text-truncate">
-                  <i className="bi bi-chat-left-text text-success flex-shrink-0"></i>
-                  <span className="text-truncate" style={{ fontSize: '0.84rem' }}>
-                    {session.title || 'Legal Inquiry'}
-                  </span>
-                </div>
+                <i className="bi bi-chat-left-text leading-chat-icon flex-shrink-0"></i>
+                <span className="history-item-title text-truncate">
+                  {session.title || 'Legal Inquiry'}
+                </span>
                 <button
-                  className="btn btn-link p-0 text-muted hover-text-danger border-0 flex-shrink-0 ms-1 opacity-50 hover-opacity-100"
+                  className="history-item-delete-btn"
                   onClick={(e) => handleDeleteChat(e, session.id)}
-                  title="Delete Chat"
-                  style={{ background: 'transparent' }}
+                  title="Delete conversation"
+                  aria-label="Delete conversation"
                 >
-                  <i className="bi bi-trash3" style={{ fontSize: '0.78rem' }}></i>
+                  <i className="bi bi-trash3"></i>
                 </button>
               </div>
             ))
@@ -386,54 +382,10 @@ export default function Assistant() {
               </button>
             )}
 
-            <div className="position-relative">
-              <button
-                className="topbar-model-dropdown"
-                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-              >
-                <span>{selectedModel}</span>
-                <i className="bi bi-chevron-down"></i>
-              </button>
-
-              {isModelDropdownOpen && (
-                <div
-                  className="position-absolute top-100 start-0 mt-1 p-2 rounded-3 shadow-lg"
-                  style={{
-                    background: '#1e1e1e',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    minWidth: '240px',
-                    zIndex: 1000
-                  }}
-                >
-                  <div
-                    className="p-2 rounded-2 cursor-pointer text-white d-flex align-items-center justify-content-between"
-                    style={{ background: 'rgba(16,185,129,0.15)', cursor: 'pointer' }}
-                    onClick={() => {
-                      setSelectedModel('JudicialGPT')
-                      setIsModelDropdownOpen(false)
-                    }}
-                  >
-                    <div>
-                      <div className="fw-semibold" style={{ fontSize: '0.88rem' }}>JudicialGPT</div>
-                      <small className="text-muted" style={{ fontSize: '0.74rem' }}>Supreme Court & Federal Statutes</small>
-                    </div>
-                    <i className="bi bi-check2 text-success"></i>
-                  </div>
-                  <div
-                    className="p-2 rounded-2 cursor-pointer text-white-50 mt-1 d-flex align-items-center justify-content-between"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      setSelectedModel('JudicialGPT Pro')
-                      setIsModelDropdownOpen(false)
-                    }}
-                  >
-                    <div>
-                      <div className="fw-semibold text-white" style={{ fontSize: '0.88rem' }}>JudicialGPT Pro</div>
-                      <small className="text-muted" style={{ fontSize: '0.74rem' }}>All High Courts & Arbitral Tribunals</small>
-                    </div>
-                  </div>
-                </div>
-              )}
+            <div className="topbar-model-title d-flex align-items-center gap-2">
+              <span className="fw-bold text-white" style={{ fontSize: '1.12rem', letterSpacing: '-0.3px' }}>
+                Judicial<span style={{ color: '#34d399' }}>GPT</span>
+              </span>
             </div>
           </div>
 

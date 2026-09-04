@@ -15,6 +15,36 @@
   z-index: 2000;
 }
 
+/* Global scrollbar style for assistant workspace */
+.assistant-workspace * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.assistant-workspace *::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.assistant-workspace *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.assistant-workspace *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+.assistant-workspace *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.assistant-workspace *::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 /* --------------------------------------------------------------------------
    Sidebar
    -------------------------------------------------------------------------- */
@@ -169,6 +199,31 @@
   padding: 1.5rem 0.85rem;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.sidebar-conversations::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-conversations::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-conversations::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+.sidebar-conversations::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.sidebar-conversations::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .conversations-empty {
@@ -180,18 +235,18 @@
 }
 
 .history-item {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.7rem;
-  border-radius: 8px;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 9px;
   color: #d1d5db;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.15s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  min-height: 38px;
 }
 
 .history-item:hover {
@@ -200,8 +255,63 @@
 }
 
 .history-item.active {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(16, 185, 129, 0.12);
   color: #34d399;
+}
+
+.history-item .leading-chat-icon {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  transition: color 0.18s ease;
+}
+
+.history-item:hover .leading-chat-icon,
+.history-item.active .leading-chat-icon {
+  color: #34d399;
+}
+
+.history-item-title {
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+}
+
+/* Modern Hover-Only Delete Action Button */
+.history-item-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.82rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.85);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.history-item:hover .history-item-delete-btn,
+.history-item:focus-within .history-item-delete-btn,
+.history-item.active .history-item-delete-btn {
+  opacity: 0.6;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.history-item-delete-btn:hover {
+  opacity: 1 !important;
+  background: rgba(239, 68, 68, 0.18) !important;
+  color: #f87171 !important;
+  transform: scale(1.1) !important;
 }
 
 /* Sidebar Footer & User Profile */
@@ -426,6 +536,31 @@
   flex-direction: column;
   position: relative;
   padding: 1rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.workspace-chat-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.workspace-chat-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.workspace-chat-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+.workspace-chat-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.workspace-chat-body::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* Welcome Center Banner (Matches screenshot) */

@@ -46,9 +46,14 @@ export async function generateLegalResponse(prompt, history = [], modelName = 'J
 
   const apiKey = GEMINI_API_KEY
 
-  // Map user-selected model option to Gemini endpoints
-  const primaryModel = 'gemini-1.5-flash'
-  const fallbackModel = 'gemini-1.5-pro'
+  // Prioritized list of active Gemini models
+  const modelsToTry = [
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.5-flash',
+    'gemini-3.1-flash-lite',
+    'gemini-flash-latest'
+  ]
 
   // Format conversational contents history for Gemini API
   const contents = []
@@ -81,9 +86,6 @@ export async function generateLegalResponse(prompt, history = [], modelName = 'J
       topP: 0.95
     }
   }
-
-  // Attempt primary model, then fallback
-  const modelsToTry = [primaryModel, fallbackModel]
 
   for (const model of modelsToTry) {
     try {
