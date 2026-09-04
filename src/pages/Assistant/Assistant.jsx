@@ -335,7 +335,7 @@ export default function Assistant() {
             <div className="user-popup-menu">
               <div className="p-2 border-bottom border-secondary border-opacity-25 mb-1">
                 <div className="fw-bold" style={{ fontSize: '0.85rem' }}>{currentUser?.name || 'Advocate Tayyab'}</div>
-                <div className="text-muted" style={{ fontSize: '0.72rem' }}>{currentUser?.email || 'tayyab.advocate@gmail.com'}</div>
+                <div className="text-muted" style={{ fontSize: '0.72rem' }}>{currentUser?.email || 'tayyab.advocate@gmail.com'} • {userRole}</div>
               </div>
               <button
                 className="user-popup-item"

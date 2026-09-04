@@ -124,52 +124,54 @@ export default function Home({ onOpenModal }) {
     const targetLang = LANGUAGES[currentIndex]
     if (!targetLang) return
 
-    setTypedQuery('')
-    setTypedAnswer('')
-    setIsQueryTyping(true)
-    setIsAnswerTyping(false)
+    addTimer(() => {
+      setTypedQuery('')
+      setTypedAnswer('')
+      setIsQueryTyping(true)
+      setIsAnswerTyping(false)
 
-    const queryText = targetLang.query
-    const answerText = targetLang.answer
+      const queryText = targetLang.query
+      const answerText = targetLang.answer
 
-    // 1. Slow, elegant character-by-character question typing
-    let qIdx = 0
-    const typeNextQueryChar = () => {
-      if (qIdx <= queryText.length) {
-        setTypedQuery(queryText.slice(0, qIdx))
-        qIdx++
-        const delay = 30 + Math.random() * 16
-        addTimer(typeNextQueryChar, delay)
-      } else {
-        setIsQueryTyping(false)
-        setIsAnswerTyping(true)
-        addTimer(startTypingAnswer, 400)
-      }
-    }
-
-    // 2. Slow, readable answer typing
-    const startTypingAnswer = () => {
-      let aIdx = 0
-      const typeNextAnswerChar = () => {
-        if (aIdx <= answerText.length) {
-          aIdx++
-          setTypedAnswer(answerText.slice(0, aIdx))
-
-          if (aIdx < answerText.length) {
-            const delay = 25 + Math.random() * 12
-            addTimer(typeNextAnswerChar, delay)
-          } else {
-            setIsAnswerTyping(false)
-            addTimer(() => {
-              setLangIndex((prev) => (prev + 1) % LANGUAGES.length)
-            }, 5000)
-          }
+      // 1. Slow, elegant character-by-character question typing
+      let qIdx = 0
+      const typeNextQueryChar = () => {
+        if (qIdx <= queryText.length) {
+          setTypedQuery(queryText.slice(0, qIdx))
+          qIdx++
+          const delay = 30 + Math.random() * 16
+          addTimer(typeNextQueryChar, delay)
+        } else {
+          setIsQueryTyping(false)
+          setIsAnswerTyping(true)
+          addTimer(startTypingAnswer, 400)
         }
       }
-      typeNextAnswerChar()
-    }
 
-    addTimer(typeNextQueryChar, 150)
+      // 2. Slow, readable answer typing
+      const startTypingAnswer = () => {
+        let aIdx = 0
+        const typeNextAnswerChar = () => {
+          if (aIdx <= answerText.length) {
+            aIdx++
+            setTypedAnswer(answerText.slice(0, aIdx))
+
+            if (aIdx < answerText.length) {
+              const delay = 25 + Math.random() * 12
+              addTimer(typeNextAnswerChar, delay)
+            } else {
+              setIsAnswerTyping(false)
+              addTimer(() => {
+                setLangIndex((prev) => (prev + 1) % LANGUAGES.length)
+              }, 5000)
+            }
+          }
+        }
+        typeNextAnswerChar()
+      }
+
+      addTimer(typeNextQueryChar, 150)
+    }, 0)
   }
 
   useEffect(() => {
