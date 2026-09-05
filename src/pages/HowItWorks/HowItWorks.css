@@ -64,3 +64,30 @@
   box-shadow: 0 12px 28px rgba(5, 150, 105, 0.16) !important;
 }
 
+/* Connecting Laser Pipeline Stream */
+@media (min-width: 768px) {
+  .how-it-works-page .row.g-4.mt-1 {
+    position: relative;
+  }
+  .how-it-works-page .row.g-4.mt-1::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 15%;
+    right: 15%;
+    height: 3px;
+    background: linear-gradient(90deg, #059669, #10b981, #34d399, #06b6d4, #10b981, #059669);
+    background-size: 250% 100%;
+    animation: flowLaserLine 3s linear infinite;
+    z-index: 0;
+    opacity: 0.55;
+    border-radius: 999px;
+  }
+}
+
+@keyframes flowLaserLine {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 250% 0%; }
+}
+
+
