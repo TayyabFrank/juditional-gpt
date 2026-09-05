@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import useScrollReveal from '../../hooks/useScrollReveal'
 import './Home.css'
 import Tilt3D from '../../components/Tilt3D'
 import ThreeCanvas3D from '../../components/ThreeCanvas3D'
@@ -74,6 +75,9 @@ const HERO_MODES = [
 export default function Home({ onOpenModal }) {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
+  
+  // Initialize scroll reveal observer
+  useScrollReveal()
 
   const handleTryFree = () => {
     if (isAuthenticated) {
@@ -199,16 +203,16 @@ export default function Home({ onOpenModal }) {
           <div className="row align-items-center g-4 g-xl-5">
 
             {/* LEFT COLUMN: Hero Title, Subtitle, CTA & Stats Bar */}
-            <div className="col-lg-5 col-xl-5 ps-5">
+            <div className="col-lg-5 col-xl-5 ps-lg-4 ps-xl-5 reveal-on-scroll reveal-slide-left">
 
               {/* AI Platform Badge */}
-              <div className="ai-badge-pill">
+              <div className="ai-badge-pill anim-float">
                 <span className="badge-sparkle">✨</span>
                 <span>AI-Powered Judicial Intelligence Platform</span>
                 <span className="badge-status-dot"></span>
               </div>
 
-              {/* Dynamic Serif Typography: JudicialGPT for [Case Analysis / Document Review / Legal Research / Legal Analysis] */}
+              {/* Dynamic Serif Typography */}
               <div className="hero-heading">
                 <span className="heading-line-1">JudicialGPT</span>
                 <span className="heading-line-2"><center>for</center></span>
@@ -217,23 +221,23 @@ export default function Home({ onOpenModal }) {
                 </span>
               </div>
 
-              {/* Dynamic Subtitle Matching judicialgpt.org */}
+              {/* Dynamic Subtitle */}
               <p className={`hero-subtext ${isHeroTransitioning ? 'fade-out' : 'fade-in'}`}>
                 {currentHeroMode.subtitle}
               </p>
 
               {/* Hero CTA Button */}
-              <div>
+              <div className="hero-cta-wrapper">
                 <button className="btn-hero-assistant" onClick={handleTryFree}>
                   <i className="bi bi-robot fs-5"></i>
                   <span>Try AI Assistant Free</span>
-                  <i className="bi bi-arrow-right fs-5"></i>
+                  <i className="bi bi-arrow-right fs-5 btn-arrow-bounce"></i>
                 </button>
               </div>
 
               {/* Stats Glass Card with 3D Tilt */}
               <Tilt3D maxTilt={7} scale={1.02} perspective={900}>
-                <div className="stats-strip-card">
+                <div className="stats-strip-card shimmer-card">
                   <div className="stats-grid-layout">
                     <div className="stat-metric stat-metric-1">
                       <div className="stat-big">2.4M</div>
@@ -258,10 +262,10 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* RIGHT COLUMN: Interactive 3D Tablet Mockup (Hidden on mobile) */}
-            <div className="col-lg-7 col-xl-7 d-none d-lg-block">
+            <div className="col-lg-7 col-xl-7 d-none d-lg-block reveal-on-scroll reveal-slide-right">
               <Tilt3D maxTilt={8} scale={1.02} perspective={1400} className="w-100 position-relative">
                 {/* 3D Floating Depth Badges */}
-                <div className="floating-3d-tag tag-top-right">
+                <div className="floating-3d-tag tag-top-right anim-float">
                   <i className="bi bi-shield-check text-success fs-5"></i>
                   <div>
                     <div className="tag-title">Zero Hallucination</div>
@@ -269,7 +273,7 @@ export default function Home({ onOpenModal }) {
                   </div>
                 </div>
 
-                <div className="floating-3d-tag tag-bottom-left">
+                <div className="floating-3d-tag tag-bottom-left anim-float-delayed">
                   <i className="bi bi-lightning-charge-fill text-warning fs-5"></i>
                   <div>
                     <div className="tag-title">Sub-Second Search</div>
@@ -410,14 +414,14 @@ export default function Home({ onOpenModal }) {
           </div>
 
           {/* Scroll To Explore Indicator */}
-          <div className="scroll-indicator-container">
+          <div className="scroll-indicator-container reveal-on-scroll reveal-fade-up">
             <a
               href="#hero"
               className="scroll-indicator-link"
               onClick={(e) => { e.preventDefault(); window.scrollBy({ top: 350, behavior: 'smooth' }); }}
             >
               <span>SCROLL TO EXPLORE</span>
-              <i className="bi bi-chevron-down"></i>
+              <i className="bi bi-chevron-down anim-bounce-subtle"></i>
             </a>
           </div>
 
@@ -425,12 +429,12 @@ export default function Home({ onOpenModal }) {
       </section>
 
       {/* 6-ITEM FEATURE HIGHLIGHTS STRIP MATCHING REFERENCE DESIGN */}
-      <section className="feature-highlights-strip-wrapper">
+      <section className="feature-highlights-strip-wrapper reveal-on-scroll reveal-fade-up">
         <div className="container-fluid px-lg-4">
           <div className="feature-highlights-row">
             {/* 1. Open to All */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-1">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-shield"></i>
               </div>
               <div className="highlight-text">
@@ -440,8 +444,8 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* 2. All-in-One */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-2">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-bank2"></i>
               </div>
               <div className="highlight-text">
@@ -451,8 +455,8 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* 3. Multi-language */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-3">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-globe"></i>
               </div>
               <div className="highlight-text">
@@ -462,8 +466,8 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* 4. Safe & Secure */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-4">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-shield-check"></i>
               </div>
               <div className="highlight-text">
@@ -473,8 +477,8 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* 5. Learn Smarter, */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-5">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-lightning-charge-fill"></i>
               </div>
               <div className="highlight-text">
@@ -484,8 +488,8 @@ export default function Home({ onOpenModal }) {
             </div>
 
             {/* 6. Affordable */}
-            <div className="feature-highlight-item">
-              <div className="highlight-icon-circle">
+            <div className="feature-highlight-item reveal-on-scroll reveal-fade-up stagger-6">
+              <div className="highlight-icon-circle hover-icon-pop">
                 <i className="bi bi-currency-dollar"></i>
               </div>
               <div className="highlight-text">

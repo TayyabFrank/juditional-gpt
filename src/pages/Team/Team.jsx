@@ -99,8 +99,8 @@ export default function Team({ onOpenModal }) {
       <div className="container">
 
         {/* Header */}
-        <div className="page-hero-header">
-          <span className="section-tag">LEADERSHIP & ADVISORS</span>
+        <div className="page-hero-header reveal-on-scroll reveal-fade-up">
+          <span className="section-tag anim-float">LEADERSHIP & ADVISORS</span>
           <h1 className="section-main-title">The Minds Behind JudicialGPT</h1>
           <p className="section-description">
             A cross-disciplinary team of Supreme Court advocates, legal researchers, and artificial intelligence scientists at NCAI. Click on any team member to view their background.
@@ -109,11 +109,11 @@ export default function Team({ onOpenModal }) {
 
         {/* Team Grid: Display All 6 Team Members */}
         <div className="row g-4 mb-3 justify-content-center">
-          {teamMembers.map((m) => (
-            <div key={m.id} className="col-12 col-sm-6 col-lg-4">
+          {teamMembers.map((m, idx) => (
+            <div key={m.id} className={`col-12 col-sm-6 col-lg-4 reveal-on-scroll reveal-fade-up stagger-${(idx % 3) + 1}`}>
               <Tilt3D maxTilt={0} scale={1.04} perspective={900} glare={false} className="h-100">
                 <div
-                  className="team-card-minimal"
+                  className="team-card-minimal shimmer-card"
                   onClick={() => setSelectedMember(m)}
                   role="button"
                   tabIndex={0}
@@ -277,8 +277,8 @@ export default function Team({ onOpenModal }) {
         )}
 
         {/* Research Collaboration Callout */}
-        <div className="p-4 rounded-4 glass-card text-center mb-1">
-          <span className="section-tag">ACADEMIC & JUDICIAL COLLABORATION</span>
+        <div className="p-4 rounded-4 glass-card text-center mb-1 reveal-on-scroll reveal-zoom-in">
+          <span className="section-tag anim-float">ACADEMIC & JUDICIAL COLLABORATION</span>
           <h3 className="fw-bold mt-2 mb-3">Partner With Our Legal Tech Lab</h3>
           <p className="text-muted max-w-600 mx-auto mb-4">
             We partner with High Court Bar Associations, Law Faculties, and judicial academies across Pakistan to advance legal informatics.
@@ -290,6 +290,6 @@ export default function Team({ onOpenModal }) {
         </div>
 
       </div>
-    </div >
+    </div>
   )
 }

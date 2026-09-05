@@ -77,8 +77,8 @@ export default function AiTools({ onOpenModal }) {
       <div className="container">
 
         {/* Header */}
-        <div className="page-hero-header">
-          <span className="section-tag">SPECIALIZED TOOLKIT</span>
+        <div className="page-hero-header reveal-on-scroll reveal-fade-up">
+          <span className="section-tag anim-float">SPECIALIZED TOOLKIT</span>
           <h1 className="section-main-title">AI Tools for the Pakistani Legal Profession</h1>
           <p className="section-description">
             Tailored AI utilities designed to automate precedent discovery, statutory audit, petition drafting, and trial strategy.
@@ -86,11 +86,11 @@ export default function AiTools({ onOpenModal }) {
         </div>
 
         {/* Filter Tabs */}
-        <div className="d-flex justify-content-center flex-wrap gap-2 mb-3">
+        <div className="d-flex justify-content-center flex-wrap gap-2 mb-3 reveal-on-scroll reveal-fade-up stagger-1">
           {['all', 'research', 'procedural', 'constitutional', 'drafting', 'trial', 'criminal'].map((cat) => (
             <button
               key={cat}
-              className={`btn btn-sm rounded-pill px-3 py-2 fw-semibold ${activeTab === cat ? 'btn-success' : 'btn-outline-secondary'
+              className={`btn btn-sm rounded-pill px-3 py-2 fw-semibold filter-tab-btn ${activeTab === cat ? 'btn-success active-filter-tab' : 'btn-outline-secondary'
                 }`}
               onClick={() => setActiveTab(cat)}
             >
@@ -101,11 +101,11 @@ export default function AiTools({ onOpenModal }) {
 
         {/* Tools Grid */}
         <div className="row g-4 mb-3">
-          {filteredTools.map((t) => (
-            <div key={t.id} className="col-md-6 col-lg-4">
+          {filteredTools.map((t, idx) => (
+            <div key={t.id} className={`col-md-6 col-lg-4 reveal-on-scroll reveal-fade-up stagger-${(idx % 3) + 1}`}>
               <Tilt3D maxTilt={10} scale={1.03} perspective={1100} className="h-100">
-                <div className="tool-suite-card h-100">
-                  <div className="tool-header-icon">
+                <div className="tool-suite-card shimmer-card h-100">
+                  <div className="tool-header-icon hover-icon-pop">
                     <i className={`bi ${t.icon}`}></i>
                   </div>
                   <span className="badge bg-success bg-opacity-10 text-success border border-success-subtle mb-2 w-fit">
@@ -127,7 +127,7 @@ export default function AiTools({ onOpenModal }) {
         </div>
 
         {/* Bottom banner */}
-        <div className="p-4 rounded-4 glass-card text-center mb-1">
+        <div className="p-4 rounded-4 glass-card text-center mb-1 reveal-on-scroll reveal-zoom-in">
           <h3 className="fw-bold mb-2">Need a custom AI tool for your law firm or chamber?</h3>
           <p className="text-muted mb-3">
             We integrate with private chamber files, case management systems, and specialized arbitral rules.

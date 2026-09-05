@@ -1,15 +1,17 @@
 /* ==========================================================================
-   About Page Styles
+   About Page Styles & Animations
    ========================================================================== */
 
 .about-narrative-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1.5px solid rgba(255, 255, 255, 0.95);
   border-radius: 24px;
-  padding: 2rem;
+  padding: 2.2rem;
   box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
   margin-bottom: 1.5rem;
+  transition: all 0.35s var(--ease-cinematic);
 }
 
 .mission-stat-box {
@@ -19,4 +21,35 @@
   border: 1px solid rgba(16, 185, 129, 0.2);
   text-align: center;
   box-shadow: 0 4px 14px rgba(5, 60, 42, 0.04);
+  transition: all 0.3s var(--ease-spring);
 }
+
+.mission-stat-box:hover {
+  transform: translateY(-5px) scale(1.03);
+  border-color: #059669;
+  box-shadow: 0 12px 28px rgba(5, 150, 105, 0.16);
+}
+
+.mission-stat-box:hover .stat-number {
+  color: #047857;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.feature-glass-box {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 2.2rem;
+  box-shadow: 0 16px 40px rgba(5, 59, 41, 0.06);
+  height: 100%;
+  transition: all 0.35s var(--ease-cinematic);
+}
+
+.feature-glass-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px rgba(5, 59, 41, 0.14), 0 0 25px rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+

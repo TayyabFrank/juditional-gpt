@@ -90,13 +90,13 @@ export default function Features({ onOpenModal }) {
       <div className="container">
 
         {/* Header Matching Screenshot */}
-        <div className="features-header-block text-center">
-          <div className="features-pill-badge">
+        <div className="features-header-block text-center reveal-on-scroll reveal-fade-up">
+          <div className="features-pill-badge anim-float">
             <span className="features-pill-dot"></span>
             <span>FEATURES</span>
           </div>
           <h2 className="features-main-heading">
-            <span className="heading-line-dark">Innovative Features That</span>
+            <span className="heading-line-dark">Innovative Features That </span>
             <span className="heading-line-green">Redefine Legal Assistance</span>
           </h2>
           <p className="features-subtitle-text">
@@ -107,12 +107,12 @@ export default function Features({ onOpenModal }) {
         {/* Features Grid */}
         <div className="row g-4 mt-1 mb-3">
           {featureList.map((item, idx) => (
-            <div key={idx} className="col-md-6 col-lg-4">
+            <div key={idx} className={`col-md-6 col-lg-4 reveal-on-scroll reveal-fade-up stagger-${(idx % 3) + 1}`}>
               <Tilt3D maxTilt={8} scale={1.02} perspective={1000} className="h-100">
-                <div className="feature-detail-card">
+                <div className="feature-detail-card shimmer-card">
                   <span className="feature-badge-label">{item.badge}</span>
                   <div className="d-flex align-items-center gap-3 mb-3">
-                    <div className="feature-icon-circle-lg">
+                    <div className="feature-icon-circle-lg hover-icon-pop">
                       <i className={`bi ${item.icon}`}></i>
                     </div>
                     <h3 className="feature-card-heading mb-0">{item.title}</h3>
@@ -121,8 +121,8 @@ export default function Features({ onOpenModal }) {
 
                   <ul className="feature-list-bullet">
                     {item.bullets.map((b, i) => (
-                      <li key={i}>
-                        <i className="bi bi-check-circle-fill"></i>
+                      <li key={i} className="feature-bullet-item">
+                        <i className="bi bi-check-circle-fill bullet-check-icon"></i>
                         <span>{b}</span>
                       </li>
                     ))}
@@ -134,7 +134,7 @@ export default function Features({ onOpenModal }) {
         </div>
 
         {/* CTA Bar */}
-        <div className="p-4 rounded-4 text-center glass-card mt-3 mb-1">
+        <div className="p-4 rounded-4 text-center glass-card mt-3 mb-1 reveal-on-scroll reveal-zoom-in">
           <h2 className="fw-bold mb-3 text-dark">Ready to elevate your legal research?</h2>
           <p className="text-muted max-w-600 mx-auto mb-4">
             Try our interactive assistant now or explore how JudicialGPT seamlessly searches statutes, precedents, and court records.

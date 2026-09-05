@@ -24,13 +24,13 @@
               0 4px 16px rgba(16, 185, 129, 0.08);
   overflow: hidden;
   display: flex;
-  animation: authFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: authFadeIn 0.5s var(--ease-spring);
 }
 
 @keyframes authFadeIn {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.99);
+    transform: translateY(24px) scale(0.96);
   }
   to {
     opacity: 1;

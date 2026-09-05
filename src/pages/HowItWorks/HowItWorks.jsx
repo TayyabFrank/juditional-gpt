@@ -53,8 +53,8 @@ export default function HowItWorks({ onOpenModal }) {
       <div className="container">
         
         {/* Header */}
-        <div className="page-hero-header">
-          <span className="section-tag">METHODOLOGY & PIPELINE</span>
+        <div className="page-hero-header reveal-on-scroll reveal-fade-up">
+          <span className="section-tag anim-float">METHODOLOGY & PIPELINE</span>
           <h1 className="section-main-title">How JudicialGPT Synthesizes Law</h1>
           <p className="section-description">
             A step-by-step walkthrough of our specialized Pakistani legal intelligence architecture.
@@ -64,15 +64,18 @@ export default function HowItWorks({ onOpenModal }) {
         {/* 3 Step Cards */}
         <div className="row g-4 mt-1 mb-3">
           {steps.map((s, idx) => (
-            <div key={idx} className="col-md-4">
-              <div className="workflow-timeline-card">
-                <div className="step-circle-badge">{s.num}</div>
+            <div key={idx} className={`col-md-4 reveal-on-scroll reveal-fade-up stagger-${idx + 1}`}>
+              <div className="workflow-timeline-card shimmer-card">
+                <div className="step-circle-badge">
+                  <span>{s.num}</span>
+                  <div className="radar-ping-ring"></div>
+                </div>
                 <h3 className="feature-card-heading">{s.title}</h3>
                 <p className="feature-card-text">{s.desc}</p>
                 <ul className="feature-list-bullet">
                   {s.highlights.map((h, i) => (
-                    <li key={i}>
-                      <i className="bi bi-check-circle-fill"></i>
+                    <li key={i} className="feature-bullet-item">
+                      <i className="bi bi-check-circle-fill bullet-check-icon"></i>
                       <span>{h}</span>
                     </li>
                   ))}
@@ -83,7 +86,7 @@ export default function HowItWorks({ onOpenModal }) {
         </div>
 
         {/* Architecture Diagram Box */}
-        <div className="pipeline-diagram-box mb-5">
+        <div className="pipeline-diagram-box mb-5 reveal-on-scroll reveal-zoom-in">
           <div className="text-center mb-4">
             <span className="section-tag">DEEP ARCHITECTURE</span>
             <h3 className="fw-bold text-dark mt-2">The JudicialGPT Reasoning Engine</h3>
@@ -91,30 +94,30 @@ export default function HowItWorks({ onOpenModal }) {
           </div>
 
           <div className="row g-4 text-center">
-            <div className="col-md-3">
-              <div className="p-3 bg-white rounded-4 border shadow-sm">
-                <i className="bi bi-person-lines-fill fs-2 text-success mb-2 d-block"></i>
+            <div className="col-md-3 reveal-on-scroll reveal-fade-up stagger-1">
+              <div className="pipeline-node-card p-3 bg-white rounded-4 border shadow-sm h-100">
+                <i className="bi bi-person-lines-fill fs-2 text-success mb-2 d-block hover-icon-pop"></i>
                 <h6 className="fw-bold">1. Legal Prompt</h6>
                 <small className="text-muted">English or 4 Regional Pakistani Languages</small>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="p-3 bg-white rounded-4 border shadow-sm">
-                <i className="bi bi-search fs-2 text-success mb-2 d-block"></i>
+            <div className="col-md-3 reveal-on-scroll reveal-fade-up stagger-2">
+              <div className="pipeline-node-card p-3 bg-white rounded-4 border shadow-sm h-100">
+                <i className="bi bi-search fs-2 text-success mb-2 d-block hover-icon-pop"></i>
                 <h6 className="fw-bold">2. Law Library Index</h6>
                 <small className="text-muted">SCMR, PLD, CLC, Federal Acts 1836–2026</small>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="p-3 bg-white rounded-4 border shadow-sm">
-                <i className="bi bi-cpu-fill fs-2 text-success mb-2 d-block"></i>
+            <div className="col-md-3 reveal-on-scroll reveal-fade-up stagger-3">
+              <div className="pipeline-node-card p-3 bg-white rounded-4 border shadow-sm h-100">
+                <i className="bi bi-cpu-fill fs-2 text-success mb-2 d-block hover-icon-pop"></i>
                 <h6 className="fw-bold">3. Precedent Verification</h6>
                 <small className="text-muted">Hierarchical authority & overruling checks</small>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="p-3 bg-white rounded-4 border shadow-sm">
-                <i className="bi bi-check-all fs-2 text-success mb-2 d-block"></i>
+            <div className="col-md-3 reveal-on-scroll reveal-fade-up stagger-4">
+              <div className="pipeline-node-card p-3 bg-white rounded-4 border shadow-sm h-100">
+                <i className="bi bi-check-all fs-2 text-success mb-2 d-block hover-icon-pop"></i>
                 <h6 className="fw-bold">4. Court Draft</h6>
                 <small className="text-muted">Memorandum with verified citations</small>
               </div>
@@ -123,7 +126,7 @@ export default function HowItWorks({ onOpenModal }) {
         </div>
 
         {/* Action button */}
-        <div className="text-center mb-1">
+        <div className="text-center mb-1 reveal-on-scroll reveal-fade-up">
           <button className="btn-emerald fs-6" onClick={handleAction}>
             <i className="bi bi-play-circle-fill"></i>
             <span>Test the Search Pipeline Live</span>
